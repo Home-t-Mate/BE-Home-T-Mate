@@ -1,14 +1,20 @@
-package com.example.demo.cnofig;
+package com.example.demo.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import redis.embedded.RedisServer;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Profile("local")
+/**
+ * 로컬 환경일경우 내장 레디스가 실행된다.
+ */
+@Profile("alpha")
 @Configuration
+@RequiredArgsConstructor
 public class EmbeddedRedisConfig {
 
     @Value("${spring.redis.port}")
@@ -23,8 +29,8 @@ public class EmbeddedRedisConfig {
     }
 
     @PreDestroy
-    public void stopRedis(){
-        if(redisServer != null) {
+    public void stopRedis() {
+        if (redisServer != null) {
             redisServer.stop();
         }
     }
