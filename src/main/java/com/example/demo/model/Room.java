@@ -1,51 +1,35 @@
 package com.example.demo.model;
 
 
-import org.springframework.web.socket.WebSocketSession;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import javax.persistence.*;
 
-@NotNull
+@Setter
+@Getter
+@Entity
 public class Room {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long roomId;
 
-    /**
-     * 채팅방은 id, Clients로 구성
-     */
+    @Column
+    private  String name;
 
-    private final Long id;
-    // sockets by user names
+    @Column
+    private Long userCount;
 
-    // WebSocketSession은 spring에서 WebSocket connection이 맺어진 세션을 가리킨다 - 편하게 고수준 socket이라고 생각
-    //
-    private final Map<String, WebSocketSession> clients = new HashMap<>();
-
-    public Room(Long id) {
-        this.id = id;
+    public Room(String name, Long userCount) {
+        this.name = name;
+        this.userCount = userCount;
     }
 
-    public Long getId() {
-        return id;
+    public Room(String name) {
+        this.name = name;
     }
 
-    Map<String, WebSocketSession> getClients() {
-        return clients;
-    }
+    public Room() {
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Room room = (Room) o;
-        return Objects.equals(getId(), room.getId()) &&
-                Objects.equals(getClients(), room.getClients());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId(), getClients());
     }
 }

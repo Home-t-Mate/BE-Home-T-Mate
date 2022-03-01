@@ -1,4 +1,4 @@
-package com.example.demo.repo;
+package com.example.demo.repository;
 
 import com.example.demo.model.ChatRoom;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class ChatRoomRepository {
+public class RedisRepository {
     // Redis CacheKeys
     private static final String CHAT_ROOMS = "CHAT_ROOM"; // 채팅룸 저장
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장

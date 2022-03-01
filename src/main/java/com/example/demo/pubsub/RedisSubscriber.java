@@ -2,7 +2,6 @@ package com.example.demo.pubsub;
 
 import com.example.demo.model.ChatMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.demo.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Room;
+import com.example.demo.model.Room2;
 import com.example.demo.model.RoomService;
 import com.example.demo.util.Parser;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class MainServiceImpl implements MainService {
             return new ModelAndView(REDIRECT);
         }
         Optional<Long> optionalId = parser.parseId(sid);
-        optionalId.ifPresent(id -> Optional.ofNullable(uuid).ifPresent(name -> roomService.addRoom(new Room(id))));
+        optionalId.ifPresent(id -> Optional.ofNullable(uuid).ifPresent(name -> roomService.addRoom(new Room2(id))));
 
         return this.displayMainPage(optionalId.orElse(null), uuid);
     }
@@ -66,7 +66,7 @@ public class MainServiceImpl implements MainService {
         ModelAndView modelAndView = new ModelAndView(REDIRECT);
 
         if (parser.parseId(sid).isPresent()) {
-            Room room = roomService.findRoomByStringId(sid).orElse(null);
+            Room2 room = roomService.findRoomByStringId(sid).orElse(null);
             if(room != null && uuid != null && !uuid.isEmpty()) {
                 logger.debug("User {} is going to join Room #{}", uuid, sid);
                 // open the chat room

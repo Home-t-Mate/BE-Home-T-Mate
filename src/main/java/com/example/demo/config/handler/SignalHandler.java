@@ -1,6 +1,8 @@
 package com.example.demo.config.handler;
 
+
 import com.example.demo.model.Room;
+import com.example.demo.model.Room2;
 import com.example.demo.model.RoomService;
 import com.example.demo.model.WebSocketMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +33,7 @@ public class SignalHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // session id to room mapping
-    private Map<String, Room> sessionIdToRoomMap = new HashMap<>();
+    private Map<String, Room2> sessionIdToRoomMap = new HashMap<>();
 
     // message types, used in signalling:
     // text message
@@ -79,7 +81,7 @@ public class SignalHandler extends TextWebSocketHandler {
             String userName = message.getFrom(); // origin of the message
             String data = message.getData(); // payload // room id가 들어온다
 
-            Room room;
+            Room2 room;
             switch (message.getType()) {
                 // text message from client has been received
                 case MSG_TYPE_TEXT:
@@ -99,7 +101,7 @@ public class SignalHandler extends TextWebSocketHandler {
                                     ? candidate.toString().substring(0, 64)
                                     : sdp.toString().substring(0, 64));
 
-                    Room rm = sessionIdToRoomMap.get(session.getId());
+                    Room2 rm = sessionIdToRoomMap.get(session.getId());
                     if (rm != null) {
                         Map<String, WebSocketSession> clients = roomService.getClients(rm);
                         for(Map.Entry<String, WebSocketSession> client : clients.entrySet())  {
