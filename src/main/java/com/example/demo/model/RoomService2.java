@@ -8,14 +8,14 @@ import org.springframework.web.socket.WebSocketSession;
 import java.util.*;
 
 @Service
-public class RoomService {
+public class RoomService2 {
     private final Parser parser;
 
     // repository substitution since this is a very simple realization
     private final Set<Room2> rooms = new TreeSet<>(Comparator.comparing(Room2::getId));
 
     @Autowired
-    public RoomService(final Parser parser) {
+    public RoomService2(final Parser parser) {
         this.parser = parser;
     }
 

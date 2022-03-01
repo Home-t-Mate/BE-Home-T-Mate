@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Room2;
-import com.example.demo.model.RoomService;
+import com.example.demo.model.RoomService2;
 import com.example.demo.util.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,12 @@ public class MainServiceImpl implements MainService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String REDIRECT = "redirect:/";
 
-    private final RoomService roomService;
+    private final RoomService2 roomService2;
     private final Parser parser;
 
     @Autowired
-    public MainServiceImpl(final RoomService roomService, final Parser parser) {
-        this.roomService = roomService;
+    public MainServiceImpl(final RoomService2 roomService2, final Parser parser) {
+        this.roomService2 = roomService2;
         this.parser = parser;
     }
 
@@ -33,7 +33,7 @@ public class MainServiceImpl implements MainService {
     public ModelAndView displayMainPage(final Long id, final String uuid) {
         final ModelAndView modelAndView = new ModelAndView("main");
         modelAndView.addObject("id", id);
-        modelAndView.addObject("rooms", roomService.getRooms());
+        modelAndView.addObject("rooms", roomService2.getRooms());
         modelAndView.addObject("uuid", uuid);
 
         return modelAndView;
@@ -50,7 +50,7 @@ public class MainServiceImpl implements MainService {
             return new ModelAndView(REDIRECT);
         }
         Optional<Long> optionalId = parser.parseId(sid);
-        optionalId.ifPresent(id -> Optional.ofNullable(uuid).ifPresent(name -> roomService.addRoom(new Room2(id))));
+        optionalId.ifPresent(id -> Optional.ofNullable(uuid).ifPresent(name -> roomService2.addRoom(new Room2(id))));
 
         return this.displayMainPage(optionalId.orElse(null), uuid);
     }
@@ -66,7 +66,7 @@ public class MainServiceImpl implements MainService {
         ModelAndView modelAndView = new ModelAndView(REDIRECT);
 
         if (parser.parseId(sid).isPresent()) {
-            Room2 room = roomService.findRoomByStringId(sid).orElse(null);
+            Room2 room = roomService2.findRoomByStringId(sid).orElse(null);
             if(room != null && uuid != null && !uuid.isEmpty()) {
                 logger.debug("User {} is going to join Room #{}", uuid, sid);
                 // open the chat room

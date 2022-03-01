@@ -1,10 +1,10 @@
 package com.example.demo.config.handler;
 
 
-import com.example.demo.model.Room;
 import com.example.demo.model.Room2;
-import com.example.demo.model.RoomService;
+import com.example.demo.model.RoomService2;
 import com.example.demo.model.WebSocketMessage;
+import com.example.demo.repository.RedisRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import java.util.Optional;
 // TextWebSocketHandler인터페이스를 구현한다.
 public class SignalHandler extends TextWebSocketHandler {
 
-    private final RoomService roomService;
+    private final RoomService2 roomService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ObjectMapper objectMapper = new ObjectMapper();
