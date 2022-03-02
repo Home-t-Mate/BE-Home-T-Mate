@@ -36,7 +36,7 @@ public class RoomController {
     //방 생성
     @PostMapping("/room")
     @ResponseBody
-    public Room createRoom(@RequestParam String name) {
+    public Room createRoom(@RequestBody String name) {
         System.out.println(name);
     return roomService.createRoom(name);
     }

@@ -38,6 +38,8 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
+
+
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
 

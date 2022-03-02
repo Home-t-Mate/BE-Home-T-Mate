@@ -26,7 +26,6 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtDecoder jwtDecoder;
     private final ChatService chatService;
     private final RedisRepository redisRepository;
-    private final RoomService roomService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
 //    @Override
@@ -71,10 +70,13 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
+            System.out.println("커넥션 진입");
             jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             Long roomId = chatService.getRoomId(
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
+
+
             );
             if (roomId != null) {
                 String sessionId = (String) message.getHeaders().get("simpSessionId");

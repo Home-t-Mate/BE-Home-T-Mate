@@ -1,6 +1,9 @@
 package com.example.demo.config;
 
 import com.example.demo.config.handler.SignalHandler;
+import com.example.demo.security.filter.JwtAuthFilter;
+import com.example.demo.security.jwt.JwtDecoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +13,13 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 @Configuration
 @EnableWebSocket // 웹소켓에 대해 대부분 자동설정을 한다.
+@RequiredArgsConstructor
 public class SignalConfig implements WebSocketConfigurer {
     // WebSocketConfigurer를 구현하여 추가적인 설정을 한다.
 
     @Autowired
     private SignalHandler signalHandler;
+
 
     /**
      * WebSocketHandler를 추가한다.
@@ -30,6 +35,7 @@ public class SignalConfig implements WebSocketConfigurer {
         // 등록된 Handler는 특정 endpoint("/signal")로 handshake를 완료한 후 맺어진 connection의 관리
         registry.addHandler(signalHandler, "/signal")
                 .setAllowedOrigins("*"); // allow all origins <-pub,sub의 sub
+
     }
 
 
