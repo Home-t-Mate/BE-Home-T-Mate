@@ -18,14 +18,14 @@ public class ChatService {
     /**
      * destination정보에서 roomId 추출
      */
-    public String getRoomId(String destination) {
+    public Long getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
-        if (lastIndex != -1)
-            return destination.substring(lastIndex + 1);
-        else
-            return "";
+        if (lastIndex != -1) {
+            return Long.parseLong(destination.substring(lastIndex + 1));
+        } else {
+            return null;
+        }
     }
-
     /**
      * 채팅방에 메시지 발송
      */

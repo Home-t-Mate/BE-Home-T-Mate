@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.ChatRoom;
+import com.example.demo.model.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
@@ -17,34 +18,53 @@ public class RedisRepository {
     private static final String CHAT_ROOMS = "CHAT_ROOM"; // 채팅룸 저장
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
+    public static final String USER_INOUT = "USER_INOUT";
 
     @Resource(name = "redisTemplate")
-    private HashOperations<String, String, ChatRoom> hashOpsChatRoom;
+    private HashOperations<String, String, Room> hashOpsChatRoom;
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> hashOpsEnterInfo;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOps;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, Boolean> userInOutOperations;
 
     // 모든 채팅방 조회
-    public List<ChatRoom> findAllRoom() {
+    public List<Room> findAllRoom() {
         return hashOpsChatRoom.values(CHAT_ROOMS);
     }
 
     // 특정 채팅방 조회
-    public ChatRoom findRoomById(String id) {
+    public Room findRoomById(String id) {
         return hashOpsChatRoom.get(CHAT_ROOMS, id);
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
-        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        return chatRoom;
+    public Room createChatRoom(String name) {
+        Room room = Room.create(name);
+        hashOpsChatRoom.put(CHAT_ROOMS, String.valueOf(room.getRoomId()), room);
+        return room;
+    }
+
+
+    // sessionId로 inOutKey 등록
+    public void setSessionUserInfo(String sessionId, Long roomId, String name) {
+        hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId + "_" + name);
+    }
+
+    // sessionId로 inOutKey 찾아오기
+    public String getSessionUserInfo(String sessionId) {
+        return hashOpsEnterInfo.get(ENTER_INFO, sessionId);
     }
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
     public void setUserEnterInfo(String sessionId, String roomId) {
         hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);
+    }
+
+    // inOutKey로 현재 유저가 접속 중인지 설정
+    public void setUserChatRoomInOut(String key, Boolean inOut) {
+        userInOutOperations.set(USER_INOUT + "_" + key, inOut);
     }
 
     // 유저 세션으로 입장해 있는 채팅방 ID 조회

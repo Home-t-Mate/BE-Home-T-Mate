@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -31,5 +32,12 @@ public class Room {
 
     public Room() {
 
+    }
+
+    public static Room create(String name) {
+        Room room = new Room();
+        room.roomId = Long.valueOf(UUID.randomUUID().toString());
+        room.name = name;
+        return room;
     }
 }
