@@ -26,6 +26,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class KakaoUserService {
     private String clientId;
 
     @Transactional
-    public SignupSocialDto kakaoLogin(String code) throws JsonProcessingException {
+    public SignupSocialDto kakaoLogin(String code) throws IOException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
 //        String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback");
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
@@ -56,7 +57,7 @@ public class KakaoUserService {
     }
 
     @Transactional
-    public UserResponseDto kakaoAddUserProfile(String code, Long userId) throws JsonProcessingException {
+    public UserResponseDto kakaoAddUserProfile(String code, Long userId) throws IOException {
         // 업데이트 필요성 체크
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("유저조회불가")
@@ -88,7 +89,7 @@ public class KakaoUserService {
         return userLoginResponseDto;
     }
 
-    private String getAccessToken(String code, String redirect_uri) throws JsonProcessingException {
+    private String getAccessToken(String code, String redirect_uri) throws IOException {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -119,7 +120,7 @@ public class KakaoUserService {
     }
 
     // 처음 로그인 시, 회원 가입 안되어 있으면 회원 가입 시켜주기
-    private User registerKakaoUserIfNeeded(String accessToken) throws JsonProcessingException {
+    private User registerKakaoUserIfNeeded(String accessToken) throws IOException {
         JsonNode jsonNode = getKakaoUserInfo(accessToken);
 
         // DB 에 중복된 Kakao Id 가 있는지 확인
@@ -142,7 +143,7 @@ public class KakaoUserService {
     }
 
     // 유저 프로필 등록 (나이대, 성별)
-    private UserResponseDto updateUserProfile(String accessToken, User user) throws JsonProcessingException {
+    private UserResponseDto updateUserProfile(String accessToken, User user) throws IOException {
         JsonNode jsonNode = getKakaoUserInfo(accessToken);
 
         String ageRange = jsonNode.get("kakao_account").get("age_range").asText();
@@ -174,7 +175,7 @@ public class KakaoUserService {
     }
 
     // 카카오에서 동의 항목 가져오기
-    private JsonNode getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    private JsonNode getKakaoUserInfo(String accessToken) throws IOException {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);

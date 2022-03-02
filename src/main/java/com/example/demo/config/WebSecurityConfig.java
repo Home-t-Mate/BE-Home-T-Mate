@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+
 import com.example.demo.security.FilterSkipMatcher;
 import com.example.demo.security.FormLoginSuccessHandler;
 import com.example.demo.security.filter.FormLoginFilter;
@@ -179,7 +180,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
-        configuration.addAllowedOriginPattern("*"); // 배포 전 모두 허용
+//        configuration.addAllowedOriginPattern("*"); // 배포 전 모두 허용
+        configuration.addAllowedOrigin("*"); // 배포 전 모두 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
