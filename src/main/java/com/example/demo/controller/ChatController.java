@@ -26,9 +26,11 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("token") String token) {
+    public void message(ChatMessage message, @Header("Authorization") String token) {
         String nickname = jwtTokenProvider.getUserNameFromJwt(token);
         // 로그인 회원 정보로 대화명 설정
+        System.out.println(token);
+        System.out.println(message);
         message.setSender(nickname);
         // 채팅방 인원수 세팅
         message.setUserCount(redisRepository.getUserCount(message.getRoomId()));
