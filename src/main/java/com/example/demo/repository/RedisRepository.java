@@ -21,7 +21,7 @@ public class RedisRepository {
     public static final String USER_INOUT = "USER_INOUT";
 
     @Resource(name = "redisTemplate")
-    private HashOperations<String, String, Room> hashOpsChatRoom;
+    private HashOperations<String, Long, Room> hashOpsChatRoom;
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> hashOpsEnterInfo;
     @Resource(name = "redisTemplate")
@@ -35,14 +35,14 @@ public class RedisRepository {
     }
 
     // 특정 채팅방 조회
-    public Room findRoomById(String id) {
+    public Room findRoomById(Long id) {
         return hashOpsChatRoom.get(CHAT_ROOMS, id);
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
     public Room createChatRoom(String name) {
         Room room = Room.create(name);
-        hashOpsChatRoom.put(CHAT_ROOMS, String.valueOf(room.getRoomId()), room);
+        hashOpsChatRoom.put(CHAT_ROOMS, room.getRoomId(), room);
         return room;
     }
 
@@ -58,8 +58,8 @@ public class RedisRepository {
     }
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
-    public void setUserEnterInfo(String sessionId, String roomId) {
-        hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);
+    public void setUserEnterInfo(String sessionId, Long roomId) {
+        hashOpsEnterInfo.put(ENTER_INFO, sessionId, String.valueOf(roomId));
     }
 
     // inOutKey로 현재 유저가 접속 중인지 설정
@@ -78,7 +78,7 @@ public class RedisRepository {
     }
 
     // 채팅방 유저수 조회
-    public long getUserCount(String roomId) {
+    public long getUserCount(Long roomId) {
         return Long.valueOf(Optional.ofNullable(valueOps.get(USER_COUNT + "_" + roomId)).orElse("0"));
     }
 
