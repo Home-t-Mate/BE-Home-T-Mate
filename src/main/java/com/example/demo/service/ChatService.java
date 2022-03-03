@@ -38,6 +38,7 @@ public class ChatService {
     //rtc 처리
     public void sendChatMessage(ChatMessage chatMessage) {
         chatMessage.setUserCount(redisRepository.getUserCount(chatMessage.getRoomId()));
+
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
