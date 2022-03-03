@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 
+import com.example.demo.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +22,19 @@ public class Room {
     @Column
     private Long userCount;
 
-    public Room(String name, Long userCount) {
+    @ManyToOne
+    @JoinColumn
+    private User user;
+
+    public Room(String name, long userCount) {
         this.name = name;
         this.userCount = userCount;
+//        this.user = user;
+    }
+
+    public Room(String name, User user) {
+        this.name = name;
+        this.user = user;
     }
 
     public Room(String name) {

@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.ChatRoom;
 import com.example.demo.model.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;

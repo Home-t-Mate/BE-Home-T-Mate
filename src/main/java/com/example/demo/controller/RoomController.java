@@ -4,7 +4,6 @@ import com.example.demo.entity.User;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.JwtTokenProvider;
 import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,9 +35,9 @@ public class RoomController {
     //방 생성
     @PostMapping("/room")
     @ResponseBody
-    public Room createRoom(@RequestBody String name) {
-        System.out.println(name);
-    return roomService.createRoom(name);
+    public Room createRoom(@RequestBody String name, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+    return roomService.createRoom(name, user);
     }
 
 

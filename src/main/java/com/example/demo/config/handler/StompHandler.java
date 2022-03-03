@@ -1,11 +1,8 @@
 package com.example.demo.config.handler;
 
-import com.example.demo.model.ChatMessage;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.security.jwt.JwtDecoder;
 import com.example.demo.service.ChatService;
-import com.example.demo.service.JwtTokenProvider;
-import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -15,7 +12,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @Slf4j
