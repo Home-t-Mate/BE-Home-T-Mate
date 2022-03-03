@@ -40,5 +40,7 @@ public class ChatController {
         // Websocket에 발행된 메시지를 redis로 발행(publish)
         chatMessageRepository.save(message);
         chatService.sendChatMessage(message);
+
+        //여기는 됨
     }
 }

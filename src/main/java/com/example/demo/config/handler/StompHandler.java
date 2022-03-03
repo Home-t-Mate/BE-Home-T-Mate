@@ -71,11 +71,10 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             Long roomId = chatService.getRoomId(
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
-
-
             );
             if (roomId != null) {
                 String sessionId = (String) message.getHeaders().get("simpSessionId");
+                redisRepository.plusUserCount(roomId);
                 String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
                 redisRepository.setSessionUserInfo(sessionId, roomId, name);
                 redisRepository.setUserChatRoomInOut(roomId + "_" + name, true);
