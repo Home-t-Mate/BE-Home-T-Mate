@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 public class ChatMessage {
 
+
     public ChatMessage() {
     }
 

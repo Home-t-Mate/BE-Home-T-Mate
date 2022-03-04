@@ -143,7 +143,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/webjars/**");
         skipPathList.add("GET,/ws-stomp/**");
         skipPathList.add("GET,/ws-alarm/**");
-        skipPathList.add("GET,/chat/room");
+//        skipPathList.add("GET,/chat/room");
+//        skipPathList.add("GET,/chat/rooms/**");
         skipPathList.add("GET,/chat/user");
 
         // 쇼츠
@@ -173,7 +174,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // local 테스트 시
+        configuration.addAllowedOrigin("https://chat.d8pzcrluuw660.amplifyapp.com/"); // local 테스트 시
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

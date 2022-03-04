@@ -46,40 +46,50 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
 
-//            String sender = chatMessage.getSender();
-//            Long roomId = chatMessage.getRoomId();
-//
-//            switch (chatMessage.getType()) {
-//                case OFFER:
-//                case ANSWER:
-//                case ICE:
-//                    System.out.println("영상 타입 진입");
-//                    Object candidate = chatMessage.getCandidate();
-//                    Object sdp = chatMessage.getSdp();
-////                    if (candidate != null) {
-////                        candidate.toString().substring(0, 64);
-////                    } else {
-////                        sdp.toString().substring(0,64);
-////                    }
-//                    List<Room> rm = roomRepository.findByRoomId(roomId);
-//                    if (rm != null) {
-//                        for (Room room : rm) {
-//                            if (!room.getUser().getUsername().equals(chatMessage.getSender())) {
-//                                sendChatMessage(new ChatMessage(chatMessage.getType(), roomId, sender, chatMessage.getMessage(), chatMessage.getUserCount(), (String) candidate, (String) sdp));
-//                                System.out.println("set메시지");
-//                            }
-//
-//                        }
-//
-//                    }
-//            }
+
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
 
+        String sender = chatMessage.getSender();
+        Long roomId = chatMessage.getRoomId();
 
+
+        //TODO
+        //엔터 살리고
+        //스위치 꺼내기
+        switch (chatMessage.getType()) {
+            case OFFER:
+            case ANSWER:
+            case ICE:
+                System.out.println("영상 타입 진입");
+                Object candidate = chatMessage.getCandidate();
+                System.out.println("cadidate: " + candidate);
+                Object sdp = chatMessage.getSdp();
+                System.out.println("sdp: " + sdp);
+
+//                if (candidate != null) {
+//                    candidate.toString().substring(0, 64);
+//                } else {
+//                    sdp.toString().substring(0, 64);
+//                }
+//                ;
+//                    List<Room> rm = roomRepository.findByRoomId(roomId);
+                List<Room> rm = roomRepository.findByRoomId(roomId);
+                if (rm != null) {
+                    for (Room room : rm) {
+                        if (!room.getUser().getUsername().equals(chatMessage.getSender())) {
+                            sendChatMessage(new ChatMessage(chatMessage.getType(), roomId, sender, chatMessage.getMessage(), chatMessage.getUserCount(), (String) candidate, (String) sdp));
+                            System.out.println("set메시지");
+                        }
+
+                    }
+
+                }
+        }
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+//    }
     }
-
 }
+

@@ -34,7 +34,7 @@ public class SignalConfig implements WebSocketConfigurer {
         // WebSocketHandlerRegistry에 WebSocketHandler의 구현체를 등록한다.
         // 등록된 Handler는 특정 endpoint("/signal")로 handshake를 완료한 후 맺어진 connection의 관리
         registry.addHandler(signalHandler, "/signal")
-                .setAllowedOrigins("*"); // allow all origins <-pub,sub의 sub
+                .setAllowedOrigins("https://chat.d8pzcrluuw660.amplifyapp.com/"); // allow all origins <-pub,sub의 sub
 
     }
 
