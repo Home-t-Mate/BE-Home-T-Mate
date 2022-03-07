@@ -68,11 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // cors설정 추가
         http
-                .cors()
-                .configurationSource(corsConfigurationSource());
-
-        // 서버에서 인증은 JWT로 인증하기 때문에 Session의 생성을 막습니다.
-        http
+                .cors().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -128,6 +124,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 홈
         skipPathList.add("GET,/");
 
+        skipPathList.add("GET,/user/loginView");
+
         // 회원 관리 API 허용
         skipPathList.add("GET,/user/kakao/callback");
         skipPathList.add("GET,/user/kakao/callback/{userId}");
@@ -145,7 +143,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/webjars/**");
         skipPathList.add("GET,/ws-stomp/**");
         skipPathList.add("GET,/ws-alarm/**");
-        skipPathList.add("GET,/chat/room");
+//        skipPathList.add("GET,/chat/room");
+//        skipPathList.add("GET,/chat/rooms/**");
         skipPathList.add("GET,/chat/user");
 
         // 쇼츠
@@ -175,7 +174,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // local 테스트 시
+        configuration.addAllowedOrigin("https://chat.d8pzcrluuw660.amplifyapp.com/"); // local 테스트 시
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

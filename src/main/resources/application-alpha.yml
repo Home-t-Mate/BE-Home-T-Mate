@@ -2,5 +2,6 @@ spring:
   profiles:
     active: alpha
   redis:
-    host: localhost
+    host: 52.78.96.234
+    password: !zhsthf00
     port: 6379

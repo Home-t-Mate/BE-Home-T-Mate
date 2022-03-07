@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.LoginInfo;
+import com.example.demo.entity.User;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RoomRepository;
-import com.example.demo.service.JwtTokenProvider;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +20,8 @@ import java.util.Optional;
 @RequestMapping("/chat")
 public class RoomController {
     private final RoomRepository roomRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final RoomService roomService;
-
+    private final UserRepository userRepository;
     @GetMapping("/room")
     public String rooms() {return "/chat/room";}
 
@@ -36,9 +35,9 @@ public class RoomController {
     //방 생성
     @PostMapping("/room")
     @ResponseBody
-    public Room createRoom(@RequestParam String name) {
-        System.out.println(name);
-    return roomService.createRoom(name);
+    public Room createRoom(@RequestBody String name, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+    return roomService.createRoom(name, user);
     }
 
 
@@ -55,11 +54,11 @@ public class RoomController {
         return roomService.findRoom(roomId);
     }
 
-    @GetMapping("/user")
+    @PostMapping("/user")
     @ResponseBody
-    public LoginInfo getUserInfo() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(name)).build();
+    public Optional<User> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        Optional<User> user = userRepository.findByUsername(username);
+        return user;
     }
 }

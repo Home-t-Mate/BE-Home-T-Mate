@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.User;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public Room createRoom(String name) {
+    public Room createRoom(String name, Optional<User> user) {
         Room room = new Room(name);
         return roomRepository.save(room);
     }

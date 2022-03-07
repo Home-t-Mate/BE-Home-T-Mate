@@ -42,6 +42,7 @@ public class KakaoUserService {
     public SignupSocialDto kakaoLogin(String code) throws IOException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
 //        String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback");
+//        String accessToken = getAccessToken(code, "https://chat.d8pzcrluuw660.amplifyapp.com/user/kakao/callback");
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
         // 2. 필요시에 회원가입
@@ -67,6 +68,7 @@ public class KakaoUserService {
         if (user.getAgeRange() == null) {
             // 1. "인가 코드"로 "액세스 토큰" 요청
 //            String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback/properties");
+//            String accessToken = getAccessToken(code, "https://chat.d8pzcrluuw660.amplifyapp.com/user/kakao/callback/properties");
             String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
 
             // 2. 유저 정보 업데이트
@@ -99,6 +101,7 @@ public class KakaoUserService {
         body.add("grant_type", "authorization_code");
         body.add("client_id", "dbf70dbcc152160d45ec6ce156a6c37e");
 //        body.add("redirect_uri", "http://3.38.252.235/user/kakao/callback");
+//        body.add("redirect_uri", "https://chat.d8pzcrluuw660.amplifyapp.com/user/kakao/callback");
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
         body.add("code", code);
 

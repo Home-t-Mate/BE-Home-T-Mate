@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.ChatRoom;
 import com.example.demo.model.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -15,80 +14,62 @@ import java.util.Optional;
 @Service
 public class RedisRepository {
     // Redis CacheKeys
-    private static final String CHAT_ROOMS = "CHAT_ROOM"; // 채팅룸 저장
-    public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
-    public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
+    public static final String USER_COUNT = "USER_COUNT";
+    public static final String ENTER_INFO = "ENTER_INFO";
     public static final String USER_INOUT = "USER_INOUT";
 
     @Resource(name = "redisTemplate")
-    private HashOperations<String, Long, Room> hashOpsChatRoom;
-    @Resource(name = "redisTemplate")
-    private HashOperations<String, String, String> hashOpsEnterInfo;
-    @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOps;
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, String, String> stringHashOpsEnterInfo;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, Integer> longOperations;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, Boolean> userInOutOperations;
 
-    // 모든 채팅방 조회
-    public List<Room> findAllRoom() {
-        return hashOpsChatRoom.values(CHAT_ROOMS);
-    }
 
-    // 특정 채팅방 조회
-    public Room findRoomById(Long id) {
-        return hashOpsChatRoom.get(CHAT_ROOMS, id);
-    }
-
-    // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public Room createChatRoom(String name) {
-        Room room = Room.create(name);
-        hashOpsChatRoom.put(CHAT_ROOMS, room.getRoomId(), room);
-        return room;
-    }
 
 
     // sessionId로 inOutKey 등록
     public void setSessionUserInfo(String sessionId, Long roomId, String name) {
-        hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId + "_" + name);
+        System.out.println("setSessionUserInfo");
+        stringHashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId + "_" + name);
     }
 
     // sessionId로 inOutKey 찾아오기
     public String getSessionUserInfo(String sessionId) {
-        return hashOpsEnterInfo.get(ENTER_INFO, sessionId);
+        System.out.println("getSessionUserInfo");
+        return stringHashOpsEnterInfo.get(ENTER_INFO, sessionId);
     }
 
-    // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
-    public void setUserEnterInfo(String sessionId, Long roomId) {
-        hashOpsEnterInfo.put(ENTER_INFO, sessionId, String.valueOf(roomId));
+    // sessionId 삭제
+    public void removeUserEnterInfo(String sessionId) {
+        System.out.println("removeUserEnterInfo");
+        stringHashOpsEnterInfo.delete(ENTER_INFO, sessionId);
     }
 
     // inOutKey로 현재 유저가 접속 중인지 설정
     public void setUserChatRoomInOut(String key, Boolean inOut) {
+        System.out.println("setUserChatRoomInOut");
         userInOutOperations.set(USER_INOUT + "_" + key, inOut);
     }
 
-    // 유저 세션으로 입장해 있는 채팅방 ID 조회
-    public String getUserEnterRoomId(String sessionId) {
-        return hashOpsEnterInfo.get(ENTER_INFO, sessionId);
-    }
-
-    // 유저 세션정보와 맵핑된 채팅방ID 삭제
-    public void removeUserEnterInfo(String sessionId) {
-        hashOpsEnterInfo.delete(ENTER_INFO, sessionId);
+    // inOutKey로 현재 유저가 접속 중인지 가져오기
+    public Boolean getUserChatRoomInOut(Long roomId, String name) {
+        return Optional.ofNullable(userInOutOperations.get(USER_INOUT + "_" + roomId + "_" + name)).orElse(false);
     }
 
     // 채팅방 유저수 조회
     public long getUserCount(Long roomId) {
         return Long.valueOf(Optional.ofNullable(valueOps.get(USER_COUNT + "_" + roomId)).orElse("0"));
     }
+        // 채팅방에 입장한 유저수 +1
+        public long plusUserCount(Long roomId) {
+            return Optional.ofNullable(valueOps.increment(USER_COUNT + "_" + roomId)).orElse(0L);
+        }
 
-    // 채팅방에 입장한 유저수 +1
-    public long plusUserCount(String roomId) {
-        return Optional.ofNullable(valueOps.increment(USER_COUNT + "_" + roomId)).orElse(0L);
+        // 채팅방에 입장한 유저수 -1
+        public long minusUserCount(Long roomId) {
+            return Optional.ofNullable(valueOps.decrement(USER_COUNT + "_" + roomId)).filter(count -> count > 0).orElse(0L);
+        }
     }
-
-    // 채팅방에 입장한 유저수 -1
-    public long minusUserCount(String roomId) {
-        return Optional.ofNullable(valueOps.decrement(USER_COUNT + "_" + roomId)).filter(count -> count > 0).orElse(0L);
-    }
-}

@@ -4,8 +4,6 @@ import com.example.demo.model.ChatMessage;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.security.jwt.JwtDecoder;
 import com.example.demo.service.ChatService;
-import com.example.demo.service.JwtTokenProvider;
-import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -26,7 +24,6 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtDecoder jwtDecoder;
     private final ChatService chatService;
     private final RedisRepository redisRepository;
-    private final RoomService roomService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
 //    @Override
@@ -71,31 +68,49 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
+            System.out.println("커넥션 진입");
             jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
+
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             Long roomId = chatService.getRoomId(
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
             );
+
             if (roomId != null) {
                 String sessionId = (String) message.getHeaders().get("simpSessionId");
+                redisRepository.plusUserCount(roomId);
                 String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
+                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
                 redisRepository.setSessionUserInfo(sessionId, roomId, name);
                 redisRepository.setUserChatRoomInOut(roomId + "_" + name, true);
                 System.out.println("SUBSCRIBE 클라이언트 헤더" + message.getHeaders());
                 System.out.println("SUBSCRIBE 클라이언트 세션 아이디" + sessionId);
                 System.out.println("SUBSCRIBE 클라이언트 유저 이름: " + name);
+//                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
+
+
             }
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) {
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             String findInOutKey = redisRepository.getSessionUserInfo(sessionId);
             System.out.println("DISCONNECT 클라이언트 sessionId: " + sessionId);
             System.out.println("DISCONNECT 클라이언트 inoutKey: " + findInOutKey);
+            Long roomId = chatService.getRoomId(
+                    Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
+            );
+
+            redisRepository.minusUserCount(roomId);
 
             if (findInOutKey != null) {
                 redisRepository.setUserChatRoomInOut(findInOutKey, false);
             }
 
+
+            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
+//            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
+
             redisRepository.removeUserEnterInfo(sessionId);
+
         }
 
         return message;
