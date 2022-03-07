@@ -58,7 +58,7 @@ public class SignupController {
     // 카카오 프로필 업데이트
     @GetMapping("/user/kakao/callback/{userId}")
     public ResponseEntity<UserResponseDto> kakaoAddUserProfile(@RequestParam String code,
-                                                               @PathVariable Long userId
+                                                              @PathVariable Long userId
     ) throws IOException {
 
         return ResponseEntity.ok().body(kakaoUserService.kakaoAddUserProfile(code, userId));
