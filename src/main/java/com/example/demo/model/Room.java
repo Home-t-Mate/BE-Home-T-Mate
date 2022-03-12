@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
