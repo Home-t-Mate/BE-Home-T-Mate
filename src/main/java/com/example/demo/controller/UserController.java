@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.userdto.UserProfileUpdateDto;
 import com.example.demo.dto.userdto.UserResponseDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +39,3 @@ public class UserController {
 
     }
 }
-

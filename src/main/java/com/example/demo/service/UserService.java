@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.config.S3Uploader;
 import com.example.demo.dto.userdto.UserProfileUpdateDto;
 import com.example.demo.dto.userdto.UserResponseDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

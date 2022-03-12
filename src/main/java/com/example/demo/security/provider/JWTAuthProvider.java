@@ -1,6 +1,6 @@
 package com.example.demo.security.provider;
 
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.security.jwt.JwtDecoder;
