@@ -37,7 +37,7 @@ public class ChatMessage {
 
     // 메시지 타입 : 입장, 퇴장, 채팅
     public enum MessageType {
-        ENTER, QUIT, TALK, TEXT, OFFER, ANSWER, ICE, LEAVE
+        ENTER, QUIT, TALK, YOUTUBEURL, YOUTUBEON, YOUTUBEPAUSE
     }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

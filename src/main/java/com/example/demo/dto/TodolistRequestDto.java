@@ -13,8 +13,8 @@ public class TodolistRequestDto {
 
     private String title;
     private Boolean completed;
-    private Date startAt;
-    private Date endAt;
+    private String start;
+    private String end;
     private String time;
 
 }
