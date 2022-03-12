@@ -31,6 +31,6 @@ public class CommentUserDto {
         this.content = comment.getConmment();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
-        this.profileImageUrl = comment.getUser().getUserImg();
+        this.profileImageUrl = comment.getUser().getProfileImg();
     }
 }

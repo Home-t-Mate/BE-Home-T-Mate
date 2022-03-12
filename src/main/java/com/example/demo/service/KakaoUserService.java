@@ -35,7 +35,7 @@ public class KakaoUserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-//    @Value("${kakao.client.id}")
+    //    @Value("${kakao.client.id}")
     private String clientId;
 
     @Transactional
@@ -76,7 +76,7 @@ public class KakaoUserService {
                     .userId(user.getId())
                     .username(user.getUsername())
                     .nickname(user.getNickname())
-                    .userImg(user.getUserImg())
+                    .profileImg(user.getProfileImg())
                     .build();
         }
 
@@ -144,7 +144,7 @@ public class KakaoUserService {
                 .userId(user.getId())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
-                .userImg(user.getUserImg())
+                .profileImg(user.getProfileImg())
                 .build();
     }
 

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-//import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.example.demo.certification.MessageService;
 //import com.example.demo.dto.signupdto.SignupPhoneNumDto;
 //import com.example.demo.dto.signupdto.SignupSmsCertificationDto;

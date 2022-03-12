@@ -5,20 +5,18 @@ import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import com.example.demo.dto.postsdto.PostRequestDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
-import com.example.demo.model.*;
+import com.example.demo.model.Comment;
+import com.example.demo.model.Like;
+import com.example.demo.model.Post;
+import com.example.demo.model.User;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.LikeRepository;
-//import com.example.demo.repository.PhotoRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-//import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-//import java.io.UnsupportedEncodingException;
-//import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -81,7 +79,7 @@ public class PostService {
                     likeCount,
                     commentUserDtos,
                     likeUserDtos,
-                    post.getUser().getUserImg(),
+                    post.getUser().getProfileImg(),
                     post.getCreatedAt(),
                     post.getModifiedAt()
             );

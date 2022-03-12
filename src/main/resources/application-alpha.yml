@@ -5,3 +5,4 @@ spring:
     host: 52.78.96.234
     password: !zhsthf00
     port: 6379
+

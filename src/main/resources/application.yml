@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: local
+    include:
+      - aws
+      - credentials
   devtools:
     livereload:
       enabled: true
@@ -11,3 +14,14 @@ spring:
     cache: false
   jwt:
     secret: govlepel@$&
+
+logging:
+    level:
+      com:
+        amazonaws:
+          util:
+            EC2MetadataUtils: error
+
+
+server:
+  port: 8081

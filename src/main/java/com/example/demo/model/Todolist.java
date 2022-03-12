@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.dto.TodolistRequestDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
