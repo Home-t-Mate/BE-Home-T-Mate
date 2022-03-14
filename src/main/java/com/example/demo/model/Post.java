@@ -71,6 +71,7 @@ public class Post extends Timestamped {
     public Post(PostRequestDto requestDto, User user) {
         this.content = requestDto.getContent();
         this.postImg = requestDto.getPostImg();
+        this.postImg = requestDto.getPostImg();
         this.user = user;
     }
 

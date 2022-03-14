@@ -15,5 +15,5 @@ public class PostRequestDto {
 //    private String title;
     private String content;
     private String postImg;
-    private List<Long> photoIdList;
+//    private List<Long> photoIdList;
 }

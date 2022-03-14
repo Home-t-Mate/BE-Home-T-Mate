@@ -32,24 +32,30 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/api/posts")
-
-    public Response createpost(@RequestPart(value = "content") String content,
-                               @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile,
-                               @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException
+//
+//    public Response createpost(@RequestPart(value = "content") String content,
+//                               @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile,
+//                               @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException
+//    {
+//        String Url = s3Uploader.upload(multipartFile, "static");
+//        User user = userDetails.getUser();
+//
+//        PostRequestDto dto = new PostRequestDto();
+//
+//        dto.setPostImg(Url);
+//        dto.setContent(content);
+//
+//        postService.createPost(dto, user);
+//
+//        Response response = new Response();
+//        response.setResult(true);
+//        return response;
+//    }
+    public void createpost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        String Url = s3Uploader.upload(multipartFile, "static");
         User user = userDetails.getUser();
+        postService.createPost(requestDto, user);
 
-        PostRequestDto dto = new PostRequestDto();
-
-        dto.setPostImg(Url);
-        dto.setContent(content);
-
-        postService.createPost(dto, user);
-
-        Response response = new Response();
-        response.setResult(true);
-        return response;
     }
 
 

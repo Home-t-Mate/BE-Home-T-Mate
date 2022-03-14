@@ -35,12 +35,10 @@ public class ChatController {
         System.out.println("타입 내용: " +message.getType());
         System.out.println("메시지 내용: " +message.getMessage());
         System.out.println("룸아이디 내용: " +message.getRoomId());
-        // 채팅방 인원수 세팅
+
         message.setUserCount(redisRepository.getUserCount(message.getRoomId()));
-        // Websocket에 발행된 메시지를 redis로 발행(publish)
         chatMessageRepository.save(message);
         chatService.sendChatMessage(message);
 
-        //여기는 됨
     }
 }
