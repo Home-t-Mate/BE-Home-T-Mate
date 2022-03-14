@@ -8,4 +8,6 @@ import lombok.Setter;
 public class RoomDto {
     String name;
     Long userCount;
+    String content;
+    String password;
 }

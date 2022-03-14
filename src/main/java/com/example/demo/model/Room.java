@@ -1,12 +1,13 @@
 package com.example.demo.model;
 
 
-import com.example.demo.model.User;
+import com.example.demo.dto.RoomDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -29,19 +30,32 @@ public class Room implements Serializable {
     @JoinColumn
     private User user;
 
-    public Room(String name, long userCount) {
+    @Column
+    private String content;
+
+    @Column
+    private String password;
+
+
+
+    public Room(String name, long userCount, User user, String content, String password) {
         this.name = name;
         this.userCount = userCount;
-//        this.user = user;
-    }
-
-    public Room(String name, User user) {
-        this.name = name;
         this.user = user;
+        this.content = content;
+        this.password = password;
     }
 
-    public Room(String name) {
-        this.name = name;
+//    public Room(RoomDto name, Optional<User> user) {
+//        this.name = name;
+//        this.user = user;
+//    }
+
+    public Room(RoomDto roomDto) {
+        this.name = roomDto.getName();
+        this.userCount = roomDto.getUserCount();
+        this.content = roomDto.getContent();
+        this.password = roomDto.getPassword();
     }
 
     public Room() {
