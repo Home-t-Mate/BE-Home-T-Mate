@@ -23,12 +23,12 @@ public class ChatService {
     /**
      * destination정보에서 roomId 추출
      */
-    public Long getRoomId(String destination) {
+    public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         if (lastIndex != -1) {
-            return Long.parseLong(destination.substring(lastIndex + 1));
+            return destination.substring(lastIndex + 1);
         } else {
-            return null;
+            return "";
         }
     }
 
@@ -53,7 +53,7 @@ public class ChatService {
         }
 
         String sender = chatMessage.getSender();
-        Long roomId = chatMessage.getRoomId();
+        String roomId = chatMessage.getRoomId();
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
 //    }
