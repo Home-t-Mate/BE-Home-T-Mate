@@ -7,9 +7,13 @@ import lombok.Setter;
 @Setter
 public class RoomRequestDto {
     String name;
+    String roomId;
     Long userCount;
     String content;
     String password;
     String roomImg;
-    Boolean workOut = false;
+    Boolean passCheck;
+    Boolean workOut;
+
+
 }

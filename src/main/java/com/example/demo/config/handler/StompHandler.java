@@ -1,12 +1,13 @@
 package com.example.demo.config.handler;
 
 import com.example.demo.model.ChatMessage;
+import com.example.demo.model.Room;
 import com.example.demo.repository.RedisRepository;
+import com.example.demo.repository.RoomRepository;
 import com.example.demo.security.jwt.JwtDecoder;
 import com.example.demo.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -25,6 +26,7 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtDecoder jwtDecoder;
     private final ChatService chatService;
     private final RedisRepository redisRepository;
+    private final RoomRepository roomRepository;
     private final int LIMIT = 3;
 
 
@@ -51,6 +53,11 @@ public class StompHandler implements ChannelInterceptor {
                 System.out.println("SUBSCRIBE 클라이언트 유저 이름: " + name);
 //                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
                 System.out.println(redisRepository.getUserCount(roomId));
+                Room room = roomRepository.findByroomId(roomId).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 방입니다."));
+                room.setUserCount(redisRepository.getUserCount(roomId));
+                roomRepository.save(room);
+
+
             } else {
                 throw new IllegalArgumentException("입장 인원을 초과하였습니다.");
             }
@@ -64,8 +71,12 @@ public class StompHandler implements ChannelInterceptor {
             redisRepository.minusUserCount(roomId);
             System.out.println(redisRepository.getUserCount(roomId));
 
-            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
 
+            Room room = roomRepository.findByroomId(roomId).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setUserCount(redisRepository.getUserCount(roomId));
+            roomRepository.save(room);
+
+            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
 //            Long roomId = Long.valueOf(redisRepository.getSessionUserInfo(sessionId));
             redisRepository.removeUserEnterInfo(sessionId);
 //            System.out.println(redisRepository.getUserCount(Long.valueOf(roomId)));
