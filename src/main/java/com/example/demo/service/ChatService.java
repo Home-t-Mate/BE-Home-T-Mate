@@ -20,9 +20,9 @@ public class ChatService {
     private final RedisRepository redisRepository;
     private final RoomRepository roomRepository;
 
-    /**
-     * destination정보에서 roomId 추출
-     */
+
+//     destination정보에서 roomId 추출
+
     public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         if (lastIndex != -1) {
@@ -32,15 +32,11 @@ public class ChatService {
         }
     }
 
-    /**
-     * 채팅방에 메시지 발송
-     */
-    //rtc 처리
+
     public void sendChatMessage(ChatMessage chatMessage) {
+
         chatMessage.setUserCount(redisRepository.getUserCount(chatMessage.getRoomId()));
 
-        System.out.println("레디스 레포 getUserCount 조회");
-        System.out.println(chatMessage.getType());
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
@@ -51,6 +47,7 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
+
 
         String sender = chatMessage.getSender();
         String roomId = chatMessage.getRoomId();

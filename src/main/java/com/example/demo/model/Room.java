@@ -39,10 +39,15 @@ public class Room implements Serializable {
     private String password;
 
     @Column
+    private Boolean passCheck;
+
+    @Column
     private String roomImg;
 
     @Column
     private Boolean workOut;
+
+
 
 
 
@@ -77,6 +82,7 @@ public class Room implements Serializable {
         room.content = roomDto.getContent();
         room.password = roomDto.getPassword();
         room.roomImg = roomDto.getRoomImg();
+        room.passCheck = roomDto.getPassCheck();
         room.workOut = roomDto.getWorkOut();
         room.user = user;
         return room;

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    List<Room> findAll();
 
     Optional<Room> findByroomId(String roomId);
 
-    boolean findByName(String name);
+    Room findByName(String name);
+
 }
