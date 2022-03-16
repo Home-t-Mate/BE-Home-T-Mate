@@ -7,4 +7,5 @@ import lombok.Setter;
 @Getter
 public class RoomPassRequestDto {
     private String password;
+
 }

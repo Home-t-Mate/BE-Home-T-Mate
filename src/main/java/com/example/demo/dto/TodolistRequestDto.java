@@ -16,5 +16,4 @@ public class TodolistRequestDto {
     private String start;
     private String end;
     private String time;
-
 }

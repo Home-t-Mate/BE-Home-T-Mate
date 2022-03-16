@@ -14,6 +14,7 @@ public class RoomRequestDto {
     String roomImg;
     Boolean passCheck;
     Boolean workOut;
+    int count;
 
 
 }
