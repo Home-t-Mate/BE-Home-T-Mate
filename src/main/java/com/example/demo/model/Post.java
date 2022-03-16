@@ -2,10 +2,7 @@ package com.example.demo.model;
 
 import com.example.demo.dto.postsdto.PostRequestDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,15 +13,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "post")
+//@Table(name = "post")
 public class Post extends Timestamped {
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
     // 내용
-    @Column(nullable = false)
+    @Column()
     private String content;
 
     // 사용자
@@ -56,21 +52,20 @@ public class Post extends Timestamped {
     @Column(columnDefinition = "mediumblob")
     private String postImg;
 
-    // 댓글
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JsonIgnoreProperties({"post"})
-    private List<Comment> commentList;
-
-    // 좋아요
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JsonIgnoreProperties({"post"})
-    private List<Like> likeList;
+//    // 댓글
+//    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    @JsonIgnoreProperties({"post"})
+//    private List<Comment> commentList;
+//
+//    // 좋아요
+//    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    @JsonIgnoreProperties({"post"})
+//    private List<Like> likeList;
 
 
     @Builder
     public Post(PostRequestDto requestDto, User user) {
         this.content = requestDto.getContent();
-        this.postImg = requestDto.getPostImg();
         this.postImg = requestDto.getPostImg();
         this.user = user;
     }

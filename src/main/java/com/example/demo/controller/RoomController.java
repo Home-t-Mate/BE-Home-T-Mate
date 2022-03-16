@@ -45,18 +45,21 @@ public class RoomController {
 //    //enter로 바꿔야함
    @PostMapping("/room/enter/{roomId}")
    @ResponseBody
-    public RoomResponseDto enterRoom(@PathVariable String roomId, @RequestBody RoomPassRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<RoomResponseDto> enterRoom(@PathVariable String roomId, @RequestBody RoomPassRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
        System.out.println(requestDto);
-        return roomService.enterRoom(roomId, requestDto, userDetails.getUser());
+       System.out.println(requestDto.getPassword());
+        return ResponseEntity.ok().body(roomService.enterRoom(roomId, requestDto, userDetails.getUser()));
     }
 
 
-   @GetMapping("/room/quit/{roomId}")
+
+
+   @DeleteMapping("/room/quit/{roomId}")
    @ResponseBody
    public void quitRoom(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//       Room room = roomRepository.findById(roomId).orElseThrow(()-> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
-//       this.mapSessions.put(room.getName(), this.mapSessions.get(room.getName()) - 1);
-}
+        User user = userDetails.getUser();
+       roomService.quitRoom(roomId, user);
+   }
 
 //특정방 조회
     @GetMapping("/room/{roomId}")
@@ -69,6 +72,13 @@ public class RoomController {
     public void workout(@RequestBody RoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         roomService.workout(requestDto);
     }
+
+    @DeleteMapping("/room/delete/{roomId}")
+    public void deleteRoom(@RequestParam String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        roomService.deleteRoom(roomId, user);
+    }
+
 
 
     @PostMapping("/user")

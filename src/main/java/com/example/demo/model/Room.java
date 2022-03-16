@@ -47,6 +47,9 @@ public class Room implements Serializable {
     @Column
     private Boolean workOut;
 
+    @Column
+    private int count;
+
 
 
 
@@ -85,6 +88,7 @@ public class Room implements Serializable {
         room.passCheck = roomDto.getPassCheck();
         room.workOut = roomDto.getWorkOut();
         room.user = user;
+        room.count = roomDto.getCount();
         return room;
     }
 }

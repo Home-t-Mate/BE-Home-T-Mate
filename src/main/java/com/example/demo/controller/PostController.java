@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.S3Uploader;
+import com.example.demo.dto.ContentRequestDto;
 import com.example.demo.dto.postsdto.PostRequestDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
 import com.example.demo.model.Response;
@@ -32,32 +33,35 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/api/posts")
-//
-//    public Response createpost(@RequestPart(value = "content") String content,
-//                               @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile,
-//                               @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException
-//    {
-//        String Url = s3Uploader.upload(multipartFile, "static");
-//        User user = userDetails.getUser();
-//
-//        PostRequestDto dto = new PostRequestDto();
-//
-//        dto.setPostImg(Url);
-//        dto.setContent(content);
-//
-//        postService.createPost(dto, user);
-//
-//        Response response = new Response();
-//        response.setResult(true);
-//        return response;
-//    }
-    public void createpost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public Response createpost(@RequestPart(value = "content") String content,
+                               @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException
     {
-        User user = userDetails.getUser();
-        postService.createPost(requestDto, user);
+        System.out.println(content);
 
+
+        String postImg = s3Uploader.upload(multipartFile, "static");
+        System.out.println(postImg);
+        User user = userDetails.getUser();
+
+        PostRequestDto dto = new PostRequestDto(postImg, content);
+
+
+        postService.createPost(dto, user);
+
+        Response response = new Response();
+        response.setResult(true);
+        return response;
     }
 
+
+//    public void createpost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
+//    {
+//        User user = userDetails.getUser();
+//        postService.createPost(requestDto, user);
+//
+//    }
+//
 
     // 게시글 수정
 //    @PutMapping("api/posts/{postId}")
