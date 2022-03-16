@@ -31,16 +31,16 @@ public class ChatController {
         // 로그인 회원 정보로 대화명 설정
 //        System.out.println(token);
         token = token.substring(7);
-        message.setSender(jwtDecoder.decodeUsername(token));
+//        message.setSender(jwtDecoder.decodeUsername(token));
+        message.setSender(jwtDecoder.decodeNickname(token));
+        message.setProfileImg(jwtDecoder.decodeprofileImg(token));
         System.out.println("타입 내용: " +message.getType());
         System.out.println("메시지 내용: " +message.getMessage());
         System.out.println("룸아이디 내용: " +message.getRoomId());
-        // 채팅방 인원수 세팅
+
         message.setUserCount(redisRepository.getUserCount(message.getRoomId()));
-        // Websocket에 발행된 메시지를 redis로 발행(publish)
         chatMessageRepository.save(message);
         chatService.sendChatMessage(message);
 
-        //여기는 됨
     }
 }
