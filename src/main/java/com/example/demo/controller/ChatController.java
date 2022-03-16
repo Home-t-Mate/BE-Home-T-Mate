@@ -33,6 +33,7 @@ public class ChatController {
         token = token.substring(7);
 //        message.setSender(jwtDecoder.decodeUsername(token));
         message.setSender(jwtDecoder.decodeNickname(token));
+        message.setProfileImg(jwtDecoder.decodeprofileImg(token));
         System.out.println("타입 내용: " +message.getType());
         System.out.println("메시지 내용: " +message.getMessage());
         System.out.println("룸아이디 내용: " +message.getRoomId());

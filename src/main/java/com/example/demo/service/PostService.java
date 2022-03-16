@@ -97,6 +97,7 @@ public class PostService {
             throw new IllegalArgumentException("이미지를 넣어주세요.");
         }
 
+        System.out.println("1차 break");
         String content = postRequestDto.getContent();
         if (postRequestDto.getContent() == null) {
             throw new IllegalArgumentException("내용을 입력해주세요.");
@@ -105,8 +106,12 @@ public class PostService {
             throw new IllegalArgumentException("600자 이하로 입력해주세요.");
         }
 
-        Post post = new Post(postRequestDto, user);
+        System.out.println("2차");
 
+        String postImg = postRequestDto.getPostImg();
+        Post post = new Post(content ,postImg, user);
+
+        System.out.println(post);
         return postRepository.save(post);
     }
 

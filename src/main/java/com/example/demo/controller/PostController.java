@@ -39,6 +39,7 @@ public class PostController {
     {
         System.out.println(content);
 
+        System.out.println(content.getClass().getName());
 
         String postImg = s3Uploader.upload(multipartFile, "static");
         System.out.println(postImg);
@@ -46,8 +47,12 @@ public class PostController {
 
         PostRequestDto dto = new PostRequestDto(postImg, content);
 
+        System.out.println("content: " + content);
+        System.out.println("postImg: " + postImg);
+        System.out.println("1차 통과");
 
         postService.createPost(dto, user);
+
 
         Response response = new Response();
         response.setResult(true);
