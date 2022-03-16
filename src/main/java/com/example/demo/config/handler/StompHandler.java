@@ -46,14 +46,15 @@ public class StompHandler implements ChannelInterceptor {
 
             redisRepository.setUserEnterInfo(sessionId, roomId);
             redisRepository.plusUserCount(roomId);
-            String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
+//            String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
+            String name = jwtDecoder.decodeNickname(accessor.getFirstNativeHeader("Authorization").substring(7));
 
 
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
-            System.out.println("5");
-            System.out.println("SUBSCRIBE 클라이언트 헤더" + message.getHeaders());
-            System.out.println("SUBSCRIBE 클라이언트 세션 아이디" + sessionId);
-            System.out.println("SUBSCRIBE 클라이언트 유저 이름: " + name);
+//            System.out.println("5");
+//            System.out.println("SUBSCRIBE 클라이언트 헤더" + message.getHeaders());
+//            System.out.println("SUBSCRIBE 클라이언트 세션 아이디" + sessionId);
+//            System.out.println("SUBSCRIBE 클라이언트 유저 이름: " + name);
 //                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
             System.out.println(redisRepository.getUserCount("roomId:" +  roomId));
 
@@ -65,7 +66,7 @@ public class StompHandler implements ChannelInterceptor {
 
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) {
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            System.out.println("DISCONNECT 클라이언트 sessionId: " + sessionId);
+//            System.out.println("DISCONNECT 클라이언트 sessionId: " + sessionId);
 
             String roomId = redisRepository.getUserEnterRoomId(sessionId);
 

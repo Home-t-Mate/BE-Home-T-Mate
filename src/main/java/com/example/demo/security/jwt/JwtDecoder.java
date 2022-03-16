@@ -40,6 +40,29 @@ public class JwtDecoder {
         return username;
     }
 
+    public String decodeNickname(String token) {
+
+        System.out.println(token);
+
+        DecodedJWT decodedJWT = isValidToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("유효한 토큰이 아닙니다."));
+
+        Date expiredDate = decodedJWT
+                .getClaim(CLAIM_EXPIRED_DATE)
+                .asDate();
+
+        Date now = new Date();
+        if (expiredDate.before(now)) {
+            throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
+        }
+
+        String nickname = decodedJWT
+                .getClaim(CLAIM_NICK_NAME)
+                .asString();
+
+        return nickname;
+    }
+
     private Optional<DecodedJWT> isValidToken(String token) {
         DecodedJWT jwt = null;
 
