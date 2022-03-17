@@ -10,6 +10,7 @@ import com.example.demo.repository.RedisRepository;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,24 @@ public class RoomController {
     public ResponseEntity<List<RoomResponseDto>> room() {
         return ResponseEntity.ok().body(roomService.getRooms());
     }
+
+    @GetMapping("/roomsscroll")
+    @ResponseBody
+    public ResponseEntity<List<RoomResponseDto>> roomscrooll(@RequestParam("page") int page,
+                                             @RequestParam("size") int size,
+//                                             @RequestParam("sortBy") String sortBy,
+//                                             @RequestParam("isAsc") Boolean isAsc,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails
+
+    ) {
+        User user = userDetails.getUser();
+        page = page - 1;
+//        return roomService.roomscroll(user, page, size, sortBy, isAsc);
+        return ResponseEntity.ok().body(roomService.roomscroll(user, page, size));
+
+    }
+
+
 
     //방 생성
     @PostMapping("/room")

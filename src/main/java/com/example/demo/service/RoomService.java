@@ -11,6 +11,9 @@ import com.example.demo.repository.EnterUserRepository;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -165,4 +168,37 @@ public class RoomService {
         String name = roomCheckRequestDto.getName();
         return roomRepository.findByName(name) != null;
     }
+
+//    public Page<Room> roomscroll(User user, int page, int size, String sortBy, Boolean isAsc) {
+//        Sort.Direction direction = Sort.Direction.ASC;
+//        Sort sort = Sort.by(direction, sortBy);
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//
+//        return roomRepository.findAll(pageable);
+//    }
+
+
+    public List<RoomResponseDto> roomscroll(User user, int page, int size) {
+
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Room> rooms = roomRepository.findAllByOrderByCreatedAtDesc(pageable);
+        List<RoomResponseDto> allRoom = new ArrayList<>();
+        for (Room room : rooms) {
+            allRoom.add(new RoomResponseDto(
+                    room.getName(),
+                    room.getRoomId(),
+                    room.getRoomImg(),
+                    room.getContent(),
+                    room.getUserCount(),
+                    room.getPassCheck(),
+                    room.getWorkOut(),
+                    room.getUser().getNickname(),
+                    room.getUser().getProfileImg()
+            ));
+        }
+        return allRoom;
+
+    }
+
 }

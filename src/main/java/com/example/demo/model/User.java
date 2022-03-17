@@ -43,6 +43,9 @@ public class User {
     @Column
     private String selfIntro;
 
+    @Column
+    private String email;
+
     // 일반 유저
 //    public User(SignupRequestDto requestDto, String enPassword) {
 //        this.username = requestDto.getUsername();

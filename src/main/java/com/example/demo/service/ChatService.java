@@ -4,11 +4,13 @@ import com.example.demo.model.ChatMessage;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
+import com.example.demo.util.TimeConversion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -57,6 +59,7 @@ public class ChatService {
             room.setWorkOut(false);
             roomRepository.save(room);
         }
+
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
 //    }
