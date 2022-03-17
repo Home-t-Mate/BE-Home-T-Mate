@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.RoomCheckRequestDto;
 import com.example.demo.dto.RoomPassRequestDto;
 import com.example.demo.dto.RoomRequestDto;
 import com.example.demo.dto.RoomResponseDto;
@@ -53,7 +54,6 @@ public class RoomController {
 
 
 
-
    @DeleteMapping("/room/quit/{roomId}")
    @ResponseBody
    public void quitRoom(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -80,6 +80,13 @@ public class RoomController {
     }
 
 
+    //룸 이름 조회
+    @PostMapping("/room/roomcheck")
+    @ResponseBody
+    public ResponseEntity<Boolean> roomCheck(@RequestBody RoomCheckRequestDto roomCheckRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return ResponseEntity.ok().body(roomService.roomCheck(roomCheckRequestDto, user));
+    }
 
     @PostMapping("/user")
     @ResponseBody

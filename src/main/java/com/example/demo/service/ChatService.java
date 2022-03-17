@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -45,6 +45,17 @@ public class ChatService {
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
+        }
+
+        if(ChatMessage.MessageType.YOUTUBEURL.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(true);
+            roomRepository.save(room);
+        }
+        if(ChatMessage.MessageType.YOUTUBESTOP.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(false);
+            roomRepository.save(room);
         }
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
