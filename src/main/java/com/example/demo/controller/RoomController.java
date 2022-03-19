@@ -39,8 +39,6 @@ public class RoomController {
     @ResponseBody
     public ResponseEntity<List<RoomResponseDto>> roomscrooll(@RequestParam("page") int page,
                                              @RequestParam("size") int size,
-//                                             @RequestParam("sortBy") String sortBy,
-//                                             @RequestParam("isAsc") Boolean isAsc,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails
 
     ) {
