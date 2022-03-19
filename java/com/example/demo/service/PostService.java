@@ -1,24 +1,22 @@
 package com.example.demo.service;
 
 
-import com.example.demo.config.S3Uploader;
-import com.example.demo.dto.PotoResponseDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import com.example.demo.dto.postsdto.PostRequestDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
-import com.example.demo.model.*;
+import com.example.demo.model.Comment;
+import com.example.demo.model.Like;
+import com.example.demo.model.Post;
+import com.example.demo.model.User;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.PostRepository;
-import com.example.demo.repository.PotoRepository;
 import com.example.demo.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,8 +29,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
-    private final S3Uploader s3Uploader;
-    private final PotoRepository potoRepository;
 
 //    private final S3Uploader s3Uploader;
 //    private final String imageDirName = "posts";
@@ -49,22 +45,17 @@ public class PostService {
 
         List<PostResponseDto> postResponseDtos = new ArrayList<>();
 
-
         for (Post post : posts)
         {
 
             List<CommentUserDto> commentUserDtos = new ArrayList<>();
             List<LikeUserDto> likeUserDtos = new ArrayList<>();
-            List<PotoResponseDto> potoResponseDtos = new ArrayList<>();
-
 
             Long commentCount = commentRepository.countByPost(post);
             Long likeCount = likeRepository.countByPost(post);
 
             List<Like> likes = likeRepository.findAllByPost(post);
             List<Comment> comments = commentRepository.findAllByPost(post);
-
-            List<Poto> potos = potoRepository.findByPost(post);
 
 
             for (Like like : likes)
@@ -78,25 +69,17 @@ public class PostService {
                 commentUserDtos.add(commentUserDto);
             }
 
-            for (Poto poto : potos) {
-                PotoResponseDto potoResponseDto = new PotoResponseDto(poto.getPostImg());
-                potoResponseDtos.add(potoResponseDto);
-            }
-
-
-
             PostResponseDto postResponseDto = new PostResponseDto(
                     post.getId(),
                     post.getUser().getId(),
                     post.getUser().getNickname(),
+                    post.getUser().getProfileImg(),
                     post.getContent(),
                     post.getPostImg(),
                     commentCount,
                     likeCount,
                     commentUserDtos,
                     likeUserDtos,
-                    potoResponseDtos,
-                    post.getUser().getProfileImg(),
                     post.getCreatedAt(),
                     post.getModifiedAt()
             );
@@ -106,59 +89,31 @@ public class PostService {
     }
 
 
-
     // 게시글 작성
     @Transactional
-    public Post createPost(String content, List<MultipartFile> multipartFile, User user) throws IOException {
+    public Post createPost(PostRequestDto postRequestDto, User user) {
 
-//        if (postRequestDto.getPostImg() == null) {
-//            throw new IllegalArgumentException("이미지를 넣어주세요.");
-//        }
-//
-//        System.out.println("1차 break");
-//        String content = postRequestDto.getContent();
-//        if (postRequestDto.getContent() == null) {
-//            throw new IllegalArgumentException("내용을 입력해주세요.");
-//        }
-//        if (content.length() > 600) {
-//            throw new IllegalArgumentException("600자 이하로 입력해주세요.");
-//        }
-//        Post post = new Post(content, user);
-        Post post = postRepository.save(new Post(content, user));
-
-        for(MultipartFile image : multipartFile) {
-            String postImg = s3Uploader.upload(image, "static");
-            Poto poto = new Poto(postImg, post);
-            potoRepository.save(poto);
+        if (postRequestDto.getPostImg() == null) {
+            throw new IllegalArgumentException("이미지를 넣어주세요.");
         }
+
+        System.out.println("1차 break");
+        String content = postRequestDto.getContent();
+        if (postRequestDto.getContent() == null) {
+            throw new IllegalArgumentException("내용을 입력해주세요.");
+        }
+        if (content.length() > 600) {
+            throw new IllegalArgumentException("600자 이하로 입력해주세요.");
+        }
+
+        System.out.println("2차");
+
+        String postImg = postRequestDto.getPostImg();
+        Post post = new Post(content ,postImg, user);
+
+        System.out.println(post);
         return postRepository.save(post);
     }
-
-//    // 게시글 작성
-//    @Transactional
-//    public Post createPost(PostRequestDto postRequestDto, User user) {
-//
-//        if (postRequestDto.getPostImg() == null) {
-//            throw new IllegalArgumentException("이미지를 넣어주세요.");
-//        }
-//
-//        System.out.println("1차 break");
-//        String content = postRequestDto.getContent();
-//        if (postRequestDto.getContent() == null) {
-//            throw new IllegalArgumentException("내용을 입력해주세요.");
-//        }
-//        if (content.length() > 600) {
-//            throw new IllegalArgumentException("600자 이하로 입력해주세요.");
-//        }
-//
-//        System.out.println("2차");
-//
-//        String postImg = postRequestDto.getPostImg();
-//        Post post = new Post(content ,postImg, user);
-//
-//        System.out.println(post);
-//        return postRepository.save(post);
-//    }
 
 
     // 게시글 수정
@@ -259,6 +214,25 @@ public class PostService {
 //    }
 
 
+    @Transactional
+    public void updatePost(Long postId, UserDetailsImpl userDetails, PostRequestDto postRequestDto) {
+
+//        User user = ValidateChecker.userDetailsIsNull(userDetails);
+
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+
+        User user = post.getUser();
+        Long updateId = user.getId();
+        if (!Objects.equals(userDetails.getUser().getId(), updateId)) {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
+
+        post.update(postRequestDto);
+    }
+
+
     //게시글 삭제
     @Transactional
     public Long deletePost(Long postId, UserDetailsImpl userDetails) {
@@ -278,5 +252,7 @@ public class PostService {
         postRepository.deleteById(postId);
         return postId;
     }
+
+
 
 }

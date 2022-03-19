@@ -1,6 +1,5 @@
 package com.example.demo.dto.postsdto;
 
-import com.example.demo.dto.PotoResponseDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import lombok.Getter;
@@ -16,36 +15,34 @@ public class PostResponseDto {
     private Long id;
     private Long userId;
     private String nickname;
-    private String userImg;
+    private String profileImg;
     private String content;
-    private String postsImg;
+    private String postImg;
     private Long commentCount;
     private Long likeCount;
     private List<CommentUserDto> commentUserDto;
     private List<LikeUserDto> likeUserDto;
-    private List<PotoResponseDto> potoResponseDto;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
 //
 //
 //
-    public PostResponseDto(Long id, Long userId, String nickname, String content, String postsImg ,
-                           Long commentCount, Long likeCount,
-                           List<CommentUserDto> commentUserDto, List<LikeUserDto> likeUserDto, List<PotoResponseDto> potoResponseDto,
-                           String userImg, LocalDateTime createdAt, LocalDateTime modifiedAt
+    public PostResponseDto(Long id, Long userId, String nickname, String profileImg, String content,
+                           String postImg ,
+                           Long commentCount, Long likeCount, List<CommentUserDto> commentUserDto, List<LikeUserDto> likeUserDto,
+                           LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;
+        this.profileImg = profileImg;
         this.content = content;
-        this.postsImg = postsImg;
+        this.postImg = postImg;
         this.commentCount = commentCount;
         this.likeCount = likeCount;
         this.commentUserDto = commentUserDto;
         this.likeUserDto = likeUserDto;
-        this.potoResponseDto = potoResponseDto;
-        this.userImg = userImg;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
