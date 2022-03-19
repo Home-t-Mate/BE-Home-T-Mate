@@ -59,16 +59,16 @@ public class PostController {
 //
 //
 //     게시글 수정
-//    @PutMapping("api/posts/{postId}")
-//    public ResponseEntity<PostResponseDto> updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> image,
-//                                                      @RequestPart(value = "requestDto", required = false) PostRequestDto requestDto,
-//                                                      @PathVariable Long postId,
-//                                                      @AuthenticationPrincipal UserDetailsImpl userDetails
-//    ) {
-//        User user = userDetails.getUser();
-//        return ResponseEntity.ok().body(postService.updatePost(image, requestDto, postId, user));
-//    }
-//
+    @PutMapping("api/posts/{postId}")
+    public ResponseEntity<PostResponseDto> updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> image,
+                                                      @RequestPart(value = "requestDto", required = false) PostRequestDto requestDto,
+                                                      @PathVariable Long postId,
+                                                      @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        User user = userDetails.getUser();
+        return ResponseEntity.ok().body(postService.updatePost(image, requestDto, postId, user));
+    }
+
 //    @PutMapping("api/posts/{postId}")
 //    public boolean updatePost(@PathVariable Long postId,
 //                               @RequestBody PostRequestDto postRequestDto,
