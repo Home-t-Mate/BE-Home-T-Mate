@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.RoomCheckRequestDto;
 import com.example.demo.dto.RoomPassRequestDto;
 import com.example.demo.dto.RoomRequestDto;
 import com.example.demo.dto.RoomResponseDto;
@@ -9,6 +10,7 @@ import com.example.demo.repository.RedisRepository;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,22 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.getRooms());
     }
 
+    @GetMapping("/roomsscroll")
+    @ResponseBody
+    public ResponseEntity<List<RoomResponseDto>> roomscrooll(@RequestParam("page") int page,
+                                             @RequestParam("size") int size,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails
+
+    ) {
+        User user = userDetails.getUser();
+        page = page - 1;
+//        return roomService.roomscroll(user, page, size, sortBy, isAsc);
+        return ResponseEntity.ok().body(roomService.roomscroll(user, page, size));
+
+    }
+
+
+
     //방 생성
     @PostMapping("/room")
     @ResponseBody
@@ -50,7 +68,6 @@ public class RoomController {
        System.out.println(requestDto.getPassword());
         return ResponseEntity.ok().body(roomService.enterRoom(roomId, requestDto, userDetails.getUser()));
     }
-
 
 
 
@@ -80,6 +97,13 @@ public class RoomController {
     }
 
 
+    //룸 이름 조회
+    @PostMapping("/room/roomcheck")
+    @ResponseBody
+    public ResponseEntity<Boolean> roomCheck(@RequestBody RoomCheckRequestDto roomCheckRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return ResponseEntity.ok().body(roomService.roomCheck(roomCheckRequestDto, user));
+    }
 
     @PostMapping("/user")
     @ResponseBody

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.RoomCheckRequestDto;
 import com.example.demo.dto.RoomPassRequestDto;
 import com.example.demo.dto.RoomRequestDto;
 import com.example.demo.dto.RoomResponseDto;
@@ -10,6 +11,9 @@ import com.example.demo.repository.EnterUserRepository;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,23 +28,31 @@ public class RoomService {
     private final EnterUserRepository enterUserRepository;
     private final int LIMIT = 5;
 
+    //방 생성
     public Room createRoom(RoomRequestDto requestDto, User user) {
+
+        if (requestDto.getRoomImg() == null) {
+            requestDto.setRoomImg("https://hometmate.s3.ap-northeast-2.amazonaws.com/static/5d6ed9a4-862a-441a-9378-650237c1d7c2997413_1641736796702856.jpg");
+        }
+        System.out.println("이미지 통과");
 
         if (roomRepository.findByName(requestDto.getName()) != null) {
             throw new IllegalArgumentException("이미 존재하는 방 이름입니다.");
         }
+        System.out.println("방 생성 통과");
+
         if (requestDto.getName() == null) {
             throw new IllegalArgumentException("룸 이름을 입력해주세요.");
         }
         Room room = Room.create(requestDto, user);
-        boolean passworkCheck = requestDto.getPassword() != null ? true : false;
+        boolean passworkCheck = requestDto.getPassword() != "" ? true : false;
         room.setPassCheck(passworkCheck);
 
         return roomRepository.save(room);
     }
 
 
-
+    //방 진입
     public RoomResponseDto enterRoom(String roomId, RoomPassRequestDto requestDto, User user) {
 
         Room room = roomRepository.findByroomId(roomId).orElseThrow(
@@ -48,6 +60,9 @@ public class RoomService {
 
         List<EnterUser> enterUserSize = enterUserRepository.findByRoom(room);
 
+        if(room.getWorkOut()) {
+            throw  new IllegalArgumentException("운동 중입니다. 잠시 후 입장해 주세요.");
+        }
 
         if (enterUserSize.size() > 0 ) {
             if (LIMIT < enterUserSize.size() + 1) {
@@ -71,19 +86,22 @@ public class RoomService {
         Long userCount = redisRepository.getUserCount(roomId);
         Boolean passCheck = room.getPassCheck();
         Boolean workOut = room.getWorkOut();
-        int count = room.getCount();
-        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, count);
+        String nickname = room.getUser().getNickname();
+        String profileImg = room.getUser().getProfileImg();
+        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
 
     }
 
 
+    //전체 방 조회
     public RoomResponseDto getRoom(RoomRequestDto requestDto) {
-
         Room room = roomRepository.findByroomId(requestDto.getRoomId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
 
-        if (!room.getPassword().equals(requestDto.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        if(room.getPassCheck()) {
+            if (!room.getPassword().equals(requestDto.getPassword())) {
+                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            }
         }
 
         String name = room.getName();
@@ -93,9 +111,10 @@ public class RoomService {
         Long userCount = redisRepository.getUserCount(requestDto.getRoomId());
         Boolean passCheck = room.getPassCheck();
         Boolean workOut = room.getWorkOut();
-        int count = room.getCount();
+        String nickname = room.getUser().getNickname();
+        String profileImg = room.getUser().getProfileImg();
 
-        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, count);
+        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
     }
 
     //전체 방 조화
@@ -108,9 +127,11 @@ public class RoomService {
                     room.getRoomId(),
                     room.getRoomImg(),
                     room.getContent(),
+                    room.getUserCount(),
                     room.getPassCheck(),
                     room.getWorkOut(),
-                    room.getCount()
+                    room.getUser().getNickname(),
+                    room.getUser().getProfileImg()
             ));
         }
         return allRooms;
@@ -131,9 +152,53 @@ public class RoomService {
 
         Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
 
+
         if(!room.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("방을 만든 유저만 삭제할 수 있습니다.");
         }
+
+        if(enterUserRepository.findByRoom(room) != null) {
+            throw new IllegalArgumentException("모든 유저가 퇴장 후 방을 삭제할 수 있습니다.");
+        }
+
         roomRepository.delete(room);
     }
+
+    public boolean roomCheck(RoomCheckRequestDto roomCheckRequestDto, User user) {
+        String name = roomCheckRequestDto.getName();
+        return roomRepository.findByName(name) != null;
+    }
+
+//    public Page<Room> roomscroll(User user, int page, int size, String sortBy, Boolean isAsc) {
+//        Sort.Direction direction = Sort.Direction.ASC;
+//        Sort sort = Sort.by(direction, sortBy);
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//
+//        return roomRepository.findAll(pageable);
+//    }
+
+
+    public List<RoomResponseDto> roomscroll(User user, int page, int size) {
+
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Room> rooms = roomRepository.findAllByOrderByCreatedAtDesc(pageable);
+        List<RoomResponseDto> allRoom = new ArrayList<>();
+        for (Room room : rooms) {
+            allRoom.add(new RoomResponseDto(
+                    room.getName(),
+                    room.getRoomId(),
+                    room.getRoomImg(),
+                    room.getContent(),
+                    room.getUserCount(),
+                    room.getPassCheck(),
+                    room.getWorkOut(),
+                    room.getUser().getNickname(),
+                    room.getUser().getProfileImg()
+            ));
+        }
+        return allRoom;
+
+    }
+
 }
