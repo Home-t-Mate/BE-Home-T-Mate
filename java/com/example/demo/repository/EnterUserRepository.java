@@ -1,0 +1,14 @@
+package com.example.demo.repository;
+
+import com.example.demo.model.EnterUser;
+import com.example.demo.model.Room;
+import com.example.demo.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface EnterUserRepository extends JpaRepository<EnterUser, Long > {
+    List<EnterUser> findByRoom(Room room);
+
+    EnterUser findByRoomAndUser(Room room, User user);
+}
