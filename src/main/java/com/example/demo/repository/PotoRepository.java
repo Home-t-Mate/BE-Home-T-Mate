@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PotoRepository extends JpaRepository<Poto, Long> {
     List<Poto> findByPost(Post post);
+
+    Long deleteByPost(Post post);
 }
