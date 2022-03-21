@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 
-import com.example.demo.entity.User;
+import com.example.demo.dto.RoomRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,12 +14,15 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-public class Room implements Serializable {
+public class Room extends Timestamped implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+    private Long id;
 
-    @Column
+    @Column(nullable = false)
+    private String roomId;
+
+    @Column(nullable = false)
     private  String name;
 
     @Column
@@ -29,29 +32,42 @@ public class Room implements Serializable {
     @JoinColumn
     private User user;
 
-    public Room(String name, long userCount) {
-        this.name = name;
-        this.userCount = userCount;
-//        this.user = user;
-    }
+    @Column
+    private String content;
 
-    public Room(String name, User user) {
-        this.name = name;
-        this.user = user;
-    }
+    @Column
+    private String password;
 
-    public Room(String name) {
-        this.name = name;
-    }
+    @Column
+    private Boolean passCheck;
+
+    @Column
+    private String roomImg;
+
+    @Column
+    private Boolean workOut;
+
+    @Column
+    private int count;
+
+
+
 
     public Room() {
 
     }
 
-    public static Room create(String name) {
+    public static Room create(RoomRequestDto roomDto, User user) {
         Room room = new Room();
-        room.roomId = Long.valueOf(UUID.randomUUID().toString());
-        room.name = name;
+        room.roomId = UUID.randomUUID().toString();
+        room.name = roomDto.getName();
+        room.content = roomDto.getContent();
+        room.password = roomDto.getPassword();
+        room.roomImg = roomDto.getRoomImg();
+        room.passCheck = roomDto.getPassCheck();
+        room.workOut = roomDto.getWorkOut();
+        room.user = user;
+        room.count = roomDto.getCount();
         return room;
     }
 }

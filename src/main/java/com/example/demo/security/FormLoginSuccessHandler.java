@@ -2,7 +2,7 @@ package com.example.demo.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.dto.userdto.UserLoginResponseDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.security.jwt.JwtTokenUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -32,7 +32,7 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         UserLoginResponseDto responseDto = UserLoginResponseDto.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
-                .isProfile(user.getAgeRange() != null)
+//                .isProfile(user.getAgeRange() != null)
                 .build();
 
         String result = mapper.writeValueAsString(responseDto);
