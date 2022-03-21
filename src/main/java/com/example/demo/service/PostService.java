@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.config.S3Uploader;
-import com.example.demo.dto.PotoResponseDto;
+import com.example.demo.dto.PhotoResponseDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import com.example.demo.dto.postsdto.PostRequestDto;
@@ -11,7 +11,7 @@ import com.example.demo.model.*;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.PostRepository;
-import com.example.demo.repository.PotoRepository;
+import com.example.demo.repository.PhotoRepository;
 import com.example.demo.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +33,8 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final S3Uploader s3Uploader;
-    private final PotoRepository potoRepository;
+    private final PhotoRepository photoRepository;
 
-//    private final S3Uploader s3Uploader;
-//    private final String imageDirName = "posts";
-//    private final LikesRepository likesRepository;
-//    private final CommentRepository commentRepository;
-//    private final UserRepository userRepository;
-//    private final PhotoRepository photoRepository;
 
 
     // 게시글 전체 조회
@@ -56,7 +50,7 @@ public class PostService {
 
             List<CommentUserDto> commentUserDtos = new ArrayList<>();
             List<LikeUserDto> likeUserDtos = new ArrayList<>();
-            List<PotoResponseDto> potoResponseDtos = new ArrayList<>();
+            List<PhotoResponseDto> photoResponseDtos = new ArrayList<>();
 
 
             Long commentCount = commentRepository.countByPost(post);
@@ -65,7 +59,7 @@ public class PostService {
             List<Like> likes = likeRepository.findAllByPost(post);
             List<Comment> comments = commentRepository.findAllByPost(post);
 
-            List<Poto> potos = potoRepository.findByPost(post);
+            List<Photo> photos = photoRepository.findByPost(post);
 
 
             for (Like like : likes)
@@ -79,9 +73,9 @@ public class PostService {
                 commentUserDtos.add(commentUserDto);
             }
 
-            for (Poto poto : potos) {
-                PotoResponseDto potoResponseDto = new PotoResponseDto(poto.getPostImg());
-                potoResponseDtos.add(potoResponseDto);
+            for (Photo photo : photos) {
+                PhotoResponseDto photoResponseDto = new PhotoResponseDto(photo.getPostImg());
+                photoResponseDtos.add(photoResponseDto);
             }
 
 
@@ -96,7 +90,7 @@ public class PostService {
                     likeCount,
                     commentUserDtos,
                     likeUserDtos,
-                    potoResponseDtos,
+                    photoResponseDtos,
                     post.getUser().getProfileImg(),
                     post.getCreatedAt(),
                     post.getModifiedAt()
@@ -129,13 +123,13 @@ public class PostService {
 
         for(MultipartFile image : multipartFile) {
             String postImg = s3Uploader.upload(image, "static");
-            Poto poto = new Poto(postImg, post);
-            potoRepository.save(poto);
+            Photo photo = new Photo(postImg, post);
+            photoRepository.save(photo);
         }
         return postRepository.save(post);
     }
 
-
+    @Transactional
     public void updatePost(List<MultipartFile> multipartFile, String content, Long postId, User user) throws IOException {
 
    //여기부터 해야함함
@@ -143,13 +137,16 @@ public class PostService {
         if (post == null) {
             throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다.");
         }
-        potoRepository.deleteByPost(post);
+
+        System.out.println("post:" + post);
+
+        photoRepository.deleteByPost(post);
 
         post.update(content, user);
         for(MultipartFile image : multipartFile) {
             String postImg = s3Uploader.upload(image, "static");
-            Poto poto = new Poto(postImg, post);
-            potoRepository.save(poto);
+            Photo photo = new Photo(postImg, post);
+            photoRepository.save(photo);
         }
     }
 
@@ -171,7 +168,7 @@ public class PostService {
         }
         likeRepository.deleteByPost(post);
         postRepository.deleteById(postId);
-        potoRepository.deleteByPost(post);
+        photoRepository.deleteByPost(post);
         return postId;
     }
 }

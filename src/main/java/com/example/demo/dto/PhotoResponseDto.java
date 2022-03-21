@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PotoResponseDto {
+public class PhotoResponseDto {
     private String postImg;
 
-    public PotoResponseDto(String postImg) {
+    public PhotoResponseDto(String postImg) {
         this.postImg = postImg;
     }
 }
