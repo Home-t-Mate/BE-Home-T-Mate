@@ -21,7 +21,7 @@ public class Comment extends Timestamped {
     private Long id;
 
     // 댓글 내용
-    private String comment;
+    private String conmment;
 
     // 유저
     @ManyToOne
@@ -36,7 +36,7 @@ public class Comment extends Timestamped {
     private Post post;
 
     public Comment(CommentRequestDto requestDto, Post post, User user) {
-        this.comment = requestDto.getComment();
+        this.conmment = requestDto.getConmment();
         this.post = post;
         this.user = user;
     }
