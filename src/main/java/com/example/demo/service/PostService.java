@@ -138,6 +138,11 @@ public class PostService {
             throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다.");
         }
 
+        if(!post.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("방을 만든 유저만 삭제할 수 있습니다.");
+        }
+
+
         System.out.println("post:" + post);
 
         photoRepository.deleteByPost(post);

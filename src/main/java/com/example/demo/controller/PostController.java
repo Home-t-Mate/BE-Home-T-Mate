@@ -61,7 +61,7 @@ public class PostController {
 //     게시글 수정
     @PutMapping("api/posts/{postId}")
     public void updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
-                           @RequestPart(value = "requestDto", required = false) String content,
+                           @RequestPart(value = "content", required = false) String content,
                            @PathVariable Long postId,
                            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws IOException {
