@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 public class LikeUserDto {
     private Long userId;
-    private String profileImg;
+    private String nickname;
 
     public LikeUserDto(Like like) {
         this.userId = like.getUser().getId();
-        this.profileImg = like.getUser().getProfileImg();
+        this.nickname = like.getUser().getNickname();
     }}
