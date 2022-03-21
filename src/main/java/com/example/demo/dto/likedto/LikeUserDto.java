@@ -8,8 +8,9 @@ import lombok.Setter;
 @Setter
 public class LikeUserDto {
     private Long userId;
+    private String nickname;
 
     public LikeUserDto(Like like) {
         this.userId = like.getUser().getId();
-    }
-}
+        this.nickname = like.getUser().getNickname();
+    }}

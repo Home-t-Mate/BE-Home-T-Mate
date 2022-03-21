@@ -1,6 +1,6 @@
 package com.example.demo.dto.postsdto;
 
-import com.example.demo.dto.PotoResponseDto;
+import com.example.demo.dto.PhotoResponseDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class PostResponseDto {
     private Long likeCount;
     private List<CommentUserDto> commentUserDto;
     private List<LikeUserDto> likeUserDto;
-    private List<PotoResponseDto> potoResponseDto;
+    private List<PhotoResponseDto> photoResponseDto;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -32,7 +32,7 @@ public class PostResponseDto {
 //
     public PostResponseDto(Long id, Long userId, String nickname, String content, String postsImg ,
                            Long commentCount, Long likeCount,
-                           List<CommentUserDto> commentUserDto, List<LikeUserDto> likeUserDto, List<PotoResponseDto> potoResponseDto,
+                           List<CommentUserDto> commentUserDto, List<LikeUserDto> likeUserDto, List<PhotoResponseDto> photoResponseDto,
                            String userImg, LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
         this.id = id;
@@ -44,7 +44,7 @@ public class PostResponseDto {
         this.likeCount = likeCount;
         this.commentUserDto = commentUserDto;
         this.likeUserDto = likeUserDto;
-        this.potoResponseDto = potoResponseDto;
+        this.photoResponseDto = photoResponseDto;
         this.userImg = userImg;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;

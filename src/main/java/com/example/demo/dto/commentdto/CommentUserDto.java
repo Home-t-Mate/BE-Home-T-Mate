@@ -18,7 +18,7 @@ public class CommentUserDto {
     private String nickname;
     @Size(min = 1, max = 300, message = "댓글은 300자 이하로 입력해 주세요!")
     @NotBlank(message = "댓글을 입력해주세요.")
-    private String content;
+    private String comment;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String profileImageUrl;
@@ -28,7 +28,7 @@ public class CommentUserDto {
         this.commentId = comment.getId();
         this.userId = comment.getUser().getId();
         this.nickname = comment.getUser().getNickname();
-        this.content = comment.getConmment();
+        this.comment = comment.getConmment();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
         this.profileImageUrl = comment.getUser().getProfileImg();

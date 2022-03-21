@@ -16,7 +16,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("api/like/{postId}")
+    @PostMapping("/api/like/{postId}")
     public LikeResponseDto Like(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return likeService.addLike(postId, userDetails.getUser().getId());
     }

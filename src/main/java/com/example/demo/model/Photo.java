@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Poto {
+public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -23,7 +23,7 @@ public class Poto {
     @ManyToOne
     private Post post;
 
-    public Poto(String postImg, Post post) {
+    public Photo(String postImg, Post post) {
         this.postImg = postImg;
         this.post = post;
     }
