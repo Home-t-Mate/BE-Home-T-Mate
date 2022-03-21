@@ -12,10 +12,13 @@ public class CommentResponseDto {
     private Long commentId;
     private String nickname;
     private String comment;
+    private String ProfileImg;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.comment = comment.getConmment();
+        this.ProfileImg = comment.getUser().getProfileImg();
+
     }
 }
