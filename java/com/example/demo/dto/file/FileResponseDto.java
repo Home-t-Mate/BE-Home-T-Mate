@@ -10,11 +10,12 @@ import java.util.List;
 public class FileResponseDto
 {
     private List<String> file;
-//    private String video;
+    private String video;
 
-    public FileResponseDto(List<String> file)
+    public FileResponseDto(List<String> file, String video )
     {
         this.file = file;
-//        this.video = video;
+        this.video = video;
+
     }
 }

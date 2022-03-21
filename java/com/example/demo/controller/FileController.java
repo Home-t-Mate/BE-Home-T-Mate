@@ -20,10 +20,9 @@ public class FileController
 
     // 사진 선택
     @PostMapping("/api/image")
-    public ResponseEntity<?> fileURL(@RequestPart(name = "postImg", required = false) List<MultipartFile> multipartFileList
-//                                     @RequestPart(name = "video",required = false) MultipartFile videoFile
-    ) throws IOException {
-       return fileService.fileURL(multipartFileList);
+    public ResponseEntity<?> fileURL(@RequestPart(name = "file", required = false) List<MultipartFile> multipartFileList,
+                                     @RequestPart(name = "video",required = false) MultipartFile videoFile) throws IOException {
+       return fileService.fileURL(multipartFileList,videoFile);
     }
 
 

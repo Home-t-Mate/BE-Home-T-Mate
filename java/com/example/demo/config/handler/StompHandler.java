@@ -81,6 +81,7 @@ public class StompHandler implements ChannelInterceptor {
                 roomRepository.save(room);
             }
 
+
             String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
 //            Long roomId = Long.valueOf(redisRepository.getSessionUserInfo(sessionId));
             redisRepository.removeUserEnterInfo(sessionId);

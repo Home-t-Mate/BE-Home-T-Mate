@@ -1,12 +1,10 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-@AllArgsConstructor
 public class RoomResponseDto {
     private String name;
     private String roomId;
@@ -15,18 +13,31 @@ public class RoomResponseDto {
     private Long userCount;
     private Boolean passCheck;
     private Boolean workOut;
-    private int count;
+    private String nickname;
+    private String profileImg;
 
 
-    public RoomResponseDto(String name, String roomId, String roomImg, String content, Boolean passCheck,Boolean workOut, int count) {
+    public RoomResponseDto(String name, String roomId, String roomImg, String content,Long userCount, Boolean passCheck,Boolean workOut) {
         this.name = name;
         this.roomId = roomId;
         this.roomImg = roomImg;
         this.content = content;
+        this.userCount = userCount;
         this.passCheck = passCheck;
         this.workOut = workOut;
-        this.count = count;
 
+    }
+
+    public RoomResponseDto(String name, String roomId, String roomImg, String content, Long userCount, Boolean passCheck, Boolean workOut, String nickname, String profileImg) {
+        this.name = name;
+        this.roomId = roomId;
+        this.roomImg = roomImg;
+        this.content = content;
+        this.userCount = userCount;
+        this.passCheck = passCheck;
+        this.workOut = workOut;
+        this.nickname = nickname;
+        this.profileImg = profileImg;
     }
 
 }

@@ -42,6 +42,7 @@ public class KakaoUserService {
     public SignupSocialDto kakaoLogin(String code) throws IOException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
 //        String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback");
+//        String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback");
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
         // 2. 필요시에 회원가입
@@ -67,7 +68,9 @@ public class KakaoUserService {
         if (user.getId() == null) {
             // 1. "인가 코드"로 "액세스 토큰" 요청
 //            String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback/properties");
+//            String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback/properties");
             String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
+
 
             // 2. 유저 정보 업데이트
             userLoginResponseDto = updateUserProfile(accessToken, user);
@@ -91,9 +94,11 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
+//        body.add("client_id", "a0c21ddfb1632beaa7377ac0b91c9849");
         body.add("client_id", "dbf70dbcc152160d45ec6ce156a6c37e");
 //        body.add("redirect_uri", "http://3.38.252.235/user/kakao/callback");
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
+//        body.add("redirect_uri", "https://www.act99.shop/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -121,10 +126,14 @@ public class KakaoUserService {
         String kakaoId = String.valueOf(jsonNode.get("id").asLong());
         User kakaoUser = userRepository.findByUsername(kakaoId).orElse(null);
 
+        System.out.println("회원가입 진입");
         // 회원가입
         if (kakaoUser == null) {
+            System.out.println("1");
+            System.out.println(jsonNode.get("properties").get("nickname").asText());
             String kakaoNick = jsonNode.get("properties").get("nickname").asText();
-
+            System.out.println("2");
+            System.out.println("회원가입");
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
