@@ -4,12 +4,14 @@ import com.example.demo.model.ChatMessage;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
+import com.example.demo.util.TimeConversion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -46,6 +48,18 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
+
+        if(ChatMessage.MessageType.YOUTUBEURL.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(true);
+            roomRepository.save(room);
+        }
+        if(ChatMessage.MessageType.YOUTUBESTOP.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(false);
+            roomRepository.save(room);
+        }
+
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
 //    }

@@ -43,6 +43,9 @@ public class User {
     @Column
     private String selfIntro;
 
+    @Column
+    private String email;
+
     // 일반 유저
 //    public User(SignupRequestDto requestDto, String enPassword) {
 //        this.username = requestDto.getUsername();
@@ -65,15 +68,15 @@ public class User {
         this.gender = gender;
     }
 
-//    // 네이버 유저
-//    public User(String username, String nickname, String enPassword, String gender, String ageRange){
-//        this.username = username;
-//        this.nickname = nickname;
-//        this.gender = gender;
-//        this.ageRange = ageRange;
-//        this.password = enPassword;
-//        this.profileImg = "https://skifriendbucket.s3.ap-northeast-2.amazonaws.com/static/defalt+user+frofile.png";
-//    }
+    // 네이버 유저
+    public User(String username, String nickname, String enPassword, String gender, String ageRange){
+        this.username = username;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.ageRange = ageRange;
+        this.password = enPassword;
+        this.profileImg = "https://skifriendbucket.s3.ap-northeast-2.amazonaws.com/static/defalt+user+frofile.png";
+    }
 
     public void setProfileImg(String imgPath) {
         this.profileImg = imgPath;

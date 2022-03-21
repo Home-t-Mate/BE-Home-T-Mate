@@ -22,7 +22,6 @@ public class Post extends Timestamped {
 
     @Column()
     private String postImg;
-
     // 내용
 
     @Column()
@@ -35,42 +34,9 @@ public class Post extends Timestamped {
     @JoinColumn()
     private User user;
 
-//    @Column(nullable = false)
-//    private Long userId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(nullable = false)
-//    private SkiResort skiResort;
-
-//    // 제목
-//    @Column(nullable = false)
-//    private String title;
-
-
-
-//    @Column
-//    private int likeCnt;
-//
-//    @Column
-//    private int commentCnt;
-
-    // 게시글 이미지
-
-
-//    // 댓글
-//    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    @JsonIgnoreProperties({"post"})
-//    private List<Comment> commentList;
-//
-//    // 좋아요
-//    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    @JsonIgnoreProperties({"post"})
-//    private List<Like> likeList;
-
 
 //    @Builder
     public Post(PostRequestDto requestDto, User user) {
-        this.postImg = requestDto.getPostImg();
         this.content = requestDto.getContent();
         this.user = user;
     }
@@ -80,8 +46,16 @@ public class Post extends Timestamped {
         this.content = content;
         this.user = user;
     }
-
+    public Post(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
     public void update(PostRequestDto requestDto) {
         this.content = requestDto.getContent();
+    }
+
+    public void update(String content, User user) {
+        this.content = content;
+        this.user = user;
     }
 }

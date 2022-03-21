@@ -9,6 +9,7 @@ import com.example.demo.model.User;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ public class PostController {
     // 게시글 전체 조회
     @GetMapping("/api/posts")
     public List<PostResponseDto> getPost() {
+
         return postService.getPost();
     }
 
@@ -34,24 +36,12 @@ public class PostController {
     // 게시글 작성
     @PostMapping("/api/posts")
     public Response createpost(@RequestPart(value = "content") String content,
-                               @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile,
+                               @RequestPart(value = "imageUrl", required = false) List<MultipartFile> multipartFile,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException
     {
-        System.out.println(content);
-
-        System.out.println(content.getClass().getName());
-
-        String postImg = s3Uploader.upload(multipartFile, "static");
-        System.out.println(postImg);
+//        String postImg = s3Uploader.upload(multipartFile, "static");
         User user = userDetails.getUser();
-
-        PostRequestDto dto = new PostRequestDto(postImg, content);
-
-        System.out.println("content: " + content);
-        System.out.println("postImg: " + postImg);
-        System.out.println("1차 통과");
-
-        postService.createPost(dto, user);
+        postService.createPost(content, multipartFile, user);
 
 
         Response response = new Response();
@@ -67,17 +57,17 @@ public class PostController {
 //
 //    }
 //
-
-    // 게시글 수정
-//    @PutMapping("api/posts/{postId}")
-//    public ResponseEntity<PostResponseDto> updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> image,
-//                                                      @RequestPart(value = "requestDto", required = false) PostRequestDto requestDto,
-//                                                      @PathVariable Long postId,
-//                                                      @AuthenticationPrincipal UserDetailsImpl userDetails
-//    ) {
-//        User user = userDetails.getUser();
-//        return ResponseEntity.ok().body(postService.updatePost(image, requestDto, postId, user));
-//    }
+//
+//     게시글 수정
+    @PutMapping("api/posts/{postId}")
+    public void updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
+                                             @RequestPart(value = "requestDto", required = false) String content,
+                                             @PathVariable Long postId,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) throws IOException {
+        User user = userDetails.getUser();
+        postService.updatePost(multipartFiles, content, postId, user);
+    }
 
 //    @PutMapping("api/posts/{postId}")
 //    public boolean updatePost(@PathVariable Long postId,
@@ -86,11 +76,6 @@ public class PostController {
 //        return postService.updatePost(postId, postRequestDto, userDetails);
 //    }
 
-    @PutMapping("/api/posts/{postId}")
-    public Long updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.updatePost(postId, userDetails, postRequestDto);
-        return postId;
-    }
 
 
     // 게시글 삭제

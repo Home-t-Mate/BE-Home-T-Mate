@@ -60,13 +60,13 @@ public class PostController {
 //
 //     게시글 수정
     @PutMapping("api/posts/{postId}")
-    public ResponseEntity<PostResponseDto> updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> image,
-                                                      @RequestPart(value = "requestDto", required = false) PostRequestDto requestDto,
-                                                      @PathVariable Long postId,
-                                                      @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
+    public void updatePost(@RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
+                                             @RequestPart(value = "requestDto", required = false) String content,
+                                             @PathVariable Long postId,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) throws IOException {
         User user = userDetails.getUser();
-        return ResponseEntity.ok().body(postService.updatePost(image, requestDto, postId, user));
+        postService.updatePost(multipartFiles, content, postId, user);
     }
 
 //    @PutMapping("api/posts/{postId}")
@@ -75,6 +75,7 @@ public class PostController {
 //                               @AuthenticationPrincipal UserDetailsImpl userDetails){
 //        return postService.updatePost(postId, postRequestDto, userDetails);
 //    }
+
 
 
     // 게시글 삭제

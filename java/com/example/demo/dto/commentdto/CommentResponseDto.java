@@ -11,11 +11,13 @@ import lombok.*;
 public class CommentResponseDto {
     private Long commentId;
     private String nickname;
-    private String content;
+    private String profileImg;
+    private String comment;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
         this.nickname = comment.getUser().getNickname();
-        this.content = comment.getComment();
+        this.profileImg = comment.getUser().getProfileImg();
+        this.comment = comment.getComment();
     }
 }

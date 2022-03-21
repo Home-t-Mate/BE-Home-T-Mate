@@ -14,6 +14,5 @@ import java.util.List;
 public class PostRequestDto {
 //    private String title;
     private String content;
-    private String postImg;
-//    private List<Long> postImgId;
+//    private List<Long> photoIdList;
 }

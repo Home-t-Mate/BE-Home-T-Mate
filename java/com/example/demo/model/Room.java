@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-public class Room implements Serializable {
+public class Room extends Timestamped implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,27 +52,6 @@ public class Room implements Serializable {
 
 
 
-
-
-
-
-//    public Room(String name, long userCount, User user, String content, String password, Boolean workOut) {
-//        this.name = name;
-//        this.userCount = userCount;
-//        this.user = user;
-//        this.content = content;
-//        this.password = password;
-//        this.workOut = workOut;
-//    }
-//
-//
-//    public Room(RoomDto roomDto) {
-//        this.name = roomDto.getName();
-//        this.userCount = roomDto.getUserCount();
-//        this.content = roomDto.getContent();
-//        this.password = roomDto.getPassword();
-//        this.workOut = roomDto.getWorkOut();
-//    }
 
     public Room() {
 
