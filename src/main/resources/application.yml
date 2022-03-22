@@ -1,13 +1,27 @@
-spring:
-  profiles:
-    active: local
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: false
-    add-properties: false
-  freemarker:
-    cache: false
+#spring:
+#  profiles:
+#    active: local
+#    include:
+#      - aws
+#      - credentials
+#  devtools:
+#    livereload:
+#      enabled: true
+#    restart:
+#      enabled: false
+#    add-properties: false
+#  freemarker:
+#    cache: false
   jwt:
     secret: govlepel@$&
+#
+#logging:
+#    level:
+#      com:
+#        amazonaws:
+#          util:
+#            EC2MetadataUtils: error
+#
+#
+#server:
+#  port: 8080
