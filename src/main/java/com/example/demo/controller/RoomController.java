@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.RoomCheckRequestDto;
-import com.example.demo.dto.RoomPassRequestDto;
-import com.example.demo.dto.RoomRequestDto;
-import com.example.demo.dto.RoomResponseDto;
+import com.example.demo.dto.*;
 import com.example.demo.model.User;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RedisRepository;
@@ -63,7 +60,7 @@ public class RoomController {
 //    //enter로 바꿔야함
    @PostMapping("/room/enter/{roomId}")
    @ResponseBody
-    public ResponseEntity<RoomResponseDto> enterRoom(@PathVariable String roomId, @RequestBody RoomPassRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<List<EnterUserResponseDto>> enterRoom(@PathVariable String roomId, @RequestBody RoomPassRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
        System.out.println(requestDto);
        System.out.println(requestDto.getPassword());
         return ResponseEntity.ok().body(roomService.enterRoom(roomId, requestDto, userDetails.getUser()));

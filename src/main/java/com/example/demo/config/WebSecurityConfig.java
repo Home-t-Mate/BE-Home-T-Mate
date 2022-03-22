@@ -124,6 +124,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 홈
         skipPathList.add("GET,/");
 
+
         skipPathList.add("GET,/user/loginView");
 
         // 회원 관리 API 허용
@@ -131,13 +132,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/user/kakao/callback/{userId}");
         skipPathList.add("GET,/user/naver/callback");
 
-        // 상세 탭
-        skipPathList.add("GET,/main");
-        skipPathList.add("GET,/board/carpool/{skiResort}/banner");
-        skipPathList.add("GET,/board/carpool/{skiResort}");
-        skipPathList.add("POST,/board/carpool/{skiResort}/category");
-        skipPathList.add("GET,/board/freeBoard/**");
-        skipPathList.add("GET,/skiResort/{skiResort}");
+//        // 상세 탭
+//        skipPathList.add("GET,/main");
+//        skipPathList.add("GET,/board/carpool/{skiResort}/banner");
+//        skipPathList.add("GET,/board/carpool/{skiResort}");
+//        skipPathList.add("POST,/board/carpool/{skiResort}/category");
+//        skipPathList.add("GET,/board/freeBoard/**");
+//        skipPathList.add("GET,/skiResort/{skiResort}");
+
+        skipPathList.add("GET,/story");
+        skipPathList.add("GET,/livenow");
 
         // 채팅
         skipPathList.add("GET,/webjars/**");

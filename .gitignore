@@ -8,7 +8,7 @@ build/
 *.yml
 #application-credentials.yml
 
-.properties
+*.properties
 ### Java ###
 # Compiled class file
 *.class

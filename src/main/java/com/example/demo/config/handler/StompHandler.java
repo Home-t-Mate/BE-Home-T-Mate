@@ -2,6 +2,7 @@ package com.example.demo.config.handler;
 
 import com.example.demo.model.ChatMessage;
 import com.example.demo.model.Room;
+import com.example.demo.repository.EnterUserRepository;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.UserRepository;
@@ -28,7 +29,6 @@ public class StompHandler implements ChannelInterceptor {
     private final ChatService chatService;
     private final RedisRepository redisRepository;
     private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
 
 
     @Override
@@ -42,7 +42,6 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             String roomId = chatService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-
 
             redisRepository.setUserEnterInfo(sessionId, roomId);
             redisRepository.plusUserCount(roomId);
@@ -88,7 +87,6 @@ public class StompHandler implements ChannelInterceptor {
 //            System.out.println(redisRepository.getUserCount(Long.valueOf(roomId)));
             System.out.println(redisRepository.getUserCount(roomId));
             System.out.println("맵핑 정보 삭제");
-
         }
         return message;
     }

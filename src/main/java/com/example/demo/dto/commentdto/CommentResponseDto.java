@@ -17,7 +17,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
         this.nickname = comment.getUser().getNickname();
-        this.comment = comment.getConmment();
+        this.comment = comment.getComment();
         this.ProfileImg = comment.getUser().getProfileImg();
 
     }
