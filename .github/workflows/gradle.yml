@@ -74,7 +74,7 @@ jobs:
         aws-region: ${{ secrets.CLOUD_AWS_REGION_STATIC }}
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://homehangy/$PROJECT_NAME/$GITHUB_SHA.zip
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://homehang/$PROJECT_NAME/$GITHUB_SHA.zip
 
     - name: Code Deploy
       run: aws deploy create-deployment --application-name testapp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name dev --s3-location bucket=homehang,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
