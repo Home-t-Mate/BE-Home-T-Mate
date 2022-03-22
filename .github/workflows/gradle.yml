@@ -52,7 +52,6 @@ jobs:
       run: aws s3 cp --region ap-northeast-2 homeTmate.zip s3://homehang/homeTmate/homeTmate.zip
 
 
-출처: https://prohannah.tistory.com/183 [Hello, Hannah!]
 
 # Deploy
     - name: Code Deploy
