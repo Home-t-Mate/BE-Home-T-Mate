@@ -77,4 +77,4 @@ jobs:
       run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://homehang/$PROJECT_NAME/$GITHUB_SHA.zip
 
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name clelab --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name home_training --s3-location bucket=homehang,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+      run: aws deploy create-deployment --application-name app --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name dev --s3-location bucket=homehang,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
