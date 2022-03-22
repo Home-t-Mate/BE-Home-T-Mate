@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.TodolistRequestDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.model.Todolist;
 import com.example.demo.repository.TodolistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class TodolistService {
         Todolist todolist = new Todolist(requestDto, user);
         todolist.setTitle(requestDto.getTitle());
         todolist.setCompleted(requestDto.getCompleted());
-        todolist.setStartAt(requestDto.getStartAt());
-        todolist.setEndAt(requestDto.getEndAt());
+        todolist.setStart(requestDto.getStart());
+        todolist.setEnd(requestDto.getEnd());
 
         return this.todolistRepository.save(todolist);
     }
@@ -43,11 +43,11 @@ public class TodolistService {
         if(requestDto.getCompleted() != null){
             todolist.setCompleted(requestDto.getCompleted());
         }
-        if(requestDto.getStartAt() == null){
-            todolist.setStartAt(requestDto.getStartAt());
+        if(requestDto.getStart() == null){
+            todolist.setStart(requestDto.getStart());
         }
-        if(requestDto.getEndAt() == null){
-            todolist.setEndAt(requestDto.getEndAt());
+        if(requestDto.getEnd() == null){
+            todolist.setEnd(requestDto.getEnd());
         }
         return this.todolistRepository.save(todolist);
     }

@@ -29,7 +29,8 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         WebSocketMessageBrokerConfigurer.super.registerStompEndpoints(registry);
         registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*")
 //        registry.addEndpoint("/ws-stomp").setAllowedOrigins("*").setAllowedOriginPatterns("*")
-                .withSockJS(); // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket이 동작할수 있게 합니다.
+                .withSockJS() // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket이 동작할수 있게 합니다.
+                .setHeartbeatTime(30);
     }
 
 
@@ -40,11 +41,11 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         }
 
 
-    @Override
-    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-        registration.setMessageSizeLimit(160 * 64 * 1024); // default : 64 * 1024
-        registration.setSendTimeLimit(100 * 10000); // default : 10 * 10000
-        registration.setSendBufferSizeLimit(3* 512 * 1024); // default : 512 * 1024
-    }
-
+//    @Override
+//    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+////        registration.setMessageSizeLimit(160 * 64 * 1024); // default : 64 * 1024
+////        registration.setSendTimeLimit(100 * 10000); // default : 10 * 10000 60 * 10000 * 6
+////        registration.setSendBufferSizeLimit(3* 512 * 1024); // default : 512 * 1024
+//
+//   }
     }

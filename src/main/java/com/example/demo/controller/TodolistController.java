@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.TodolistRequestDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.model.Todolist;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.TodolistService;

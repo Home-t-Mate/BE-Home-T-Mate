@@ -4,12 +4,14 @@ import com.example.demo.model.ChatMessage;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
+import com.example.demo.util.TimeConversion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,74 +22,51 @@ public class ChatService {
     private final RedisRepository redisRepository;
     private final RoomRepository roomRepository;
 
-    /**
-     * destination정보에서 roomId 추출
-     */
-    public Long getRoomId(String destination) {
+
+//     destination정보에서 roomId 추출
+
+    public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         if (lastIndex != -1) {
-            return Long.parseLong(destination.substring(lastIndex + 1));
+            return destination.substring(lastIndex + 1);
         } else {
-            return null;
+            return "";
         }
     }
 
-    /**
-     * 채팅방에 메시지 발송
-     */
-    //rtc 처리
+
     public void sendChatMessage(ChatMessage chatMessage) {
+
         chatMessage.setUserCount(redisRepository.getUserCount(chatMessage.getRoomId()));
 
-        System.out.println("레디스 레포 getUserCount 조회");
-        System.out.println(chatMessage.getType());
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
-
 
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
 
-        String sender = chatMessage.getSender();
-        Long roomId = chatMessage.getRoomId();
-
-
-        //TODO
-        //엔터 살리고
-        //스위치 꺼내기
-        switch (chatMessage.getType()) {
-            case OFFER:
-            case ANSWER:
-            case ICE:
-                System.out.println("영상 타입 진입");
-                Object candidate = chatMessage.getCandidate();
-                System.out.println("cadidate: " + candidate);
-                Object sdp = chatMessage.getSdp();
-                System.out.println("sdp: " + sdp);
-
-//                if (candidate != null) {
-//                    candidate.toString().substring(0, 64);
-//                } else {
-//                    sdp.toString().substring(0, 64);
-//                }
-//                ;
-//                    List<Room> rm = roomRepository.findByRoomId(roomId);
-                List<Room> rm = roomRepository.findByRoomId(roomId);
-                if (rm != null) {
-                    for (Room room : rm) {
-                        if (!room.getUser().getUsername().equals(chatMessage.getSender())) {
-                            sendChatMessage(new ChatMessage(chatMessage.getType(), roomId, sender, chatMessage.getMessage(), chatMessage.getUserCount(), (String) candidate, (String) sdp));
-                            System.out.println("set메시지");
-                        }
-
-                    }
-
-                }
+        if(ChatMessage.MessageType.YOUTUBEURL.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(true);
+            roomRepository.save(room);
         }
+        if(ChatMessage.MessageType.YOUTUBESTOP.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(false);
+            roomRepository.save(room);
+        }
+
+        if(ChatMessage.MessageType.YOUTUBEPAUSE.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(false);
+            roomRepository.save(room);
+        }
+
+
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
 //    }
     }

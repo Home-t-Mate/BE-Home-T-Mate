@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.dto.TodolistRequestDto;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,12 +29,10 @@ public class Todolist {
     private Boolean completed;
 
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date startAt;
+    private String start;
 
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endAt;
+    private String end;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
@@ -48,8 +46,8 @@ public class Todolist {
         this.user = user;
         this.title = requestDto.getTitle();
         this.completed = requestDto.getCompleted();
-        this.startAt = requestDto.getStartAt();
-        this.endAt = requestDto.getEndAt();
+        this.start = requestDto.getStart();
+        this.end = requestDto.getEnd();
         this.time = requestDto.getTime();
     }
 }
