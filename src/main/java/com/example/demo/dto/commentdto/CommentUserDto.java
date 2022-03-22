@@ -28,7 +28,7 @@ public class CommentUserDto {
         this.commentId = comment.getId();
         this.userId = comment.getUser().getId();
         this.nickname = comment.getUser().getNickname();
-        this.comment = comment.getConmment();
+        this.comment = comment.getComment();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
         this.profileImageUrl = comment.getUser().getProfileImg();
