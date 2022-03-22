@@ -60,6 +60,12 @@ public class ChatService {
             roomRepository.save(room);
         }
 
+        if(ChatMessage.MessageType.YOUTUBEPAUSE.equals(chatMessage.getType())) {
+            Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+            room.setWorkOut(false);
+            roomRepository.save(room);
+        }
+
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
 //    }

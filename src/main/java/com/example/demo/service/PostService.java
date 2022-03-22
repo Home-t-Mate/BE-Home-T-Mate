@@ -132,15 +132,19 @@ public class PostService {
     @Transactional
     public void updatePost(List<MultipartFile> multipartFile, String content, Long postId, User user) throws IOException {
 
-   //여기부터 해야함함
         Post post = postRepository.getById(postId);
+
+        System.out.println(content);
+        System.out.println(multipartFile);
+        if(!post.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+        }
+   //여기부터 해야함함
         if (post == null) {
             throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다.");
         }
 
-        if(!post.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("방을 만든 유저만 삭제할 수 있습니다.");
-        }
+
 
 
         System.out.println("post:" + post);

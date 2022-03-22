@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.RoomCheckRequestDto;
-import com.example.demo.dto.RoomPassRequestDto;
-import com.example.demo.dto.RoomRequestDto;
-import com.example.demo.dto.RoomResponseDto;
+import com.example.demo.dto.*;
 import com.example.demo.model.EnterUser;
 import com.example.demo.model.User;
 import com.example.demo.model.Room;
@@ -53,18 +50,24 @@ public class RoomService {
 
 
     //방 진입
-    public RoomResponseDto enterRoom(String roomId, RoomPassRequestDto requestDto, User user) {
+    public List<EnterUserResponseDto> enterRoom(String roomId, RoomPassRequestDto requestDto, User user) {
 
         Room room = roomRepository.findByroomId(roomId).orElseThrow(
                 () -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
 
-        List<EnterUser> enterUserSize = enterUserRepository.findByRoom(room);
+        EnterUser enterCheck = enterUserRepository.findByRoomAndUser(room, user);
 
-        if(room.getWorkOut()) {
-            throw  new IllegalArgumentException("운동 중입니다. 잠시 후 입장해 주세요.");
+        if (enterCheck != null) {
+            throw new IllegalArgumentException("이미 입장한 방입니다.");
         }
 
-        if (enterUserSize.size() > 0 ) {
+        List<EnterUser> enterUserSize = enterUserRepository.findByRoom(room);
+
+        if (room.getWorkOut()) {
+            throw new IllegalArgumentException("운동 중입니다. 잠시 후 입장해 주세요.");
+        }
+
+        if (enterUserSize.size() > 0) {
             if (LIMIT < enterUserSize.size() + 1) {
                 throw new IllegalArgumentException("입장인원을 초과하였습니다.");
             }
@@ -75,22 +78,33 @@ public class RoomService {
             }
         }
 
-
         EnterUser enterUser = new EnterUser(user, room);
         enterUserRepository.save(enterUser);
 
-
-        String name = room.getName();
-        String roomImg = room.getRoomImg();
-        String content = room.getContent();
-        Long userCount = redisRepository.getUserCount(roomId);
-        Boolean passCheck = room.getPassCheck();
-        Boolean workOut = room.getWorkOut();
-        String nickname = room.getUser().getNickname();
-        String profileImg = room.getUser().getProfileImg();
-        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
-
+        List<EnterUser> enterUsers = enterUserRepository.findByRoom(room);
+        List<EnterUserResponseDto> enterRoomUsers = new ArrayList<>();
+        for (EnterUser enterUser2 : enterUsers) {
+            enterRoomUsers.add(new EnterUserResponseDto(
+                    enterUser2.getUser().getNickname(),
+                    enterUser2.getUser().getProfileImg()
+            ));
+        }
+        return enterRoomUsers;
     }
+
+
+
+//        String name = room.getName();
+//        String roomImg = room.getRoomImg();
+//        String content = room.getContent();
+//        Long userCount = redisRepository.getUserCount(roomId);
+//        Boolean passCheck = room.getPassCheck();
+//        Boolean workOut = room.getWorkOut();
+//        String nickname = room.getUser().getNickname();
+//        String profileImg = room.getUser().getProfileImg();
+//        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
+//
+//    }
 
 
     //전체 방 조회

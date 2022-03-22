@@ -7,9 +7,11 @@ import com.example.demo.security.jwt.JwtDecoder;
 import com.example.demo.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.text.SimpleDateFormat;
 
@@ -40,9 +42,20 @@ public class ChatController {
         System.out.println("메시지 내용: " +message.getMessage());
         System.out.println("룸아이디 내용: " +message.getRoomId());
 
+
+
+
+
+
         message.setUserCount(redisRepository.getUserCount(message.getRoomId()));
         chatMessageRepository.save(message);
         chatService.sendChatMessage(message);
 
+    }
+
+    @EventListener
+    public void onDiscoonectEvent(SessionDisconnectEvent event) {
+
+        System.out.println(event);
     }
 }
