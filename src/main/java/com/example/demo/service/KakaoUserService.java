@@ -1,9 +1,5 @@
 package com.example.demo.service;
 
-<<<<<<< HEAD
-=======
-import com.fasterxml.jackson.core.JsonProcessingException;
->>>>>>> e30bb0c405264360bda44ddec628e7afaf2d42cc
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.dto.signupdto.SignupSocialDto;
@@ -13,10 +9,6 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-=======
-import org.springframework.beans.factory.annotation.Value;
->>>>>>> e30bb0c405264360bda44ddec628e7afaf2d42cc
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
