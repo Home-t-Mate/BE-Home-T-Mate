@@ -153,7 +153,6 @@ public class KakaoUserService {
 
         return UserResponseDto.builder()
                 .userId(user.getId())
-
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .profileImg(user.getProfileImg())
