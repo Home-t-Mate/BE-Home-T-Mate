@@ -63,14 +63,8 @@ public class UserService {
         return UserResponseDto.builder()
                 .userId(user.getId())
                 .username(user.getUsername())
-                .phoneNum(user.getPhoneNum())
                 .nickname(user.getNickname())
                 .profileImg(user.getProfileImg())
-                .gender(user.getGender())
-                .ageRange(user.getAgeRange())
-                .career(user.getCareer())
-                .selfIntro(user.getSelfIntro())
-                .certification(user.getPhoneNum() != null)
                 .build();
     }
 
