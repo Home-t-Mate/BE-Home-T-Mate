@@ -9,7 +9,7 @@ function switch_proxy() {
 
     echo "> 전환할 Port: $IDLE_PORT"
     echo "> Port 전환"
-    echo "set \$service_url http://127.0.0.1:${IDLE_PORT};" | sudo tee /home/ubuntu/service-url.inc
+    echo "set \$service_url http://127.0.0.1:${IDLE_PORT};" | sudo tee /home/ubuntu/service_url.inc
 
     # 포트 전환하면서, 바꾼거말고 다른거 kill
     if [ ${IDLE_PORT} == 8081 ]
