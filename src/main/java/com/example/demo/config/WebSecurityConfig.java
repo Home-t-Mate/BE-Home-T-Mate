@@ -132,14 +132,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/user/kakao/callback/{userId}");
         skipPathList.add("GET,/user/naver/callback");
 
-//        // 상세 탭
-//        skipPathList.add("GET,/main");
-//        skipPathList.add("GET,/board/carpool/{skiResort}/banner");
-//        skipPathList.add("GET,/board/carpool/{skiResort}");
-//        skipPathList.add("POST,/board/carpool/{skiResort}/category");
-//        skipPathList.add("GET,/board/freeBoard/**");
-//        skipPathList.add("GET,/skiResort/{skiResort}");
-
         skipPathList.add("GET,/story");
         skipPathList.add("GET,/livenow");
 
@@ -147,13 +139,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/webjars/**");
         skipPathList.add("GET,/ws-stomp/**");
         skipPathList.add("GET,/ws-alarm/**");
-//        skipPathList.add("GET,/chat/room");
-//        skipPathList.add("GET,/chat/rooms/**");
         skipPathList.add("GET,/chat/user");
 
-        // 쇼츠
-        skipPathList.add("GET,/shorts");
-        skipPathList.add("GET,/shorts/{shortsId}");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
