@@ -11,7 +11,13 @@ permissions:
     mode: 755
 hooks:
   AfterInstall:
-    # location은 프로젝트의 root경로를 기준
-    - location: /script/deploy.sh
-      timeout: 60
+    - location: /scripts/run_new_was.sh
+      timeout: 180
       runas: root
+    -location: /scripts/health_check.sh
+      timeout: 180
+      runas: root
+    - location: /scripts/switch.sh
+      timeout: 180
+      runas: root
+
