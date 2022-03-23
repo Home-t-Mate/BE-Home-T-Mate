@@ -6,12 +6,14 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
 name: Java CI with Gradle
-
+env: 
+  PROJECT_NAME: action_codedeploy
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 
 jobs:
   build:
@@ -36,8 +38,32 @@ jobs:
       shell: bash
       
       
+#     - name: Make zip file
+#       run: zip -r ./$GITHUB_SHA.zip .
+#       shell: bash
+
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.CLOUD_AWS_CREDENTIALS_ACCESS_KEY }}
+#         aws-secret-access-key: ${{ secrets.CLOUD_AWS_CREDENTIALS_SECRET_KEY }}
+#         aws-region: ${{ secrets.CLOUD_AWS_REGION_STATIC }}
+
+#     - name: Upload to S3
+#       run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://homehang/$GITHUB_SHA.zip
+# #       run: aws s3 cp --region ap-northeast-2 ./homeTmate.zip s3://homehang/app/homeTmate.zip
+
+
+
+# # Deploy
+# #     - name: Code Deploy
+# #       run: aws deploy create-deployment --application-name clelab --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name home_training --s3-location bucket=homehang,bundleType=zip,key=app/homeTmate.zip
+#     - name: Code Deploy
+#       run: aws deploy create-deployment --application-name testapp --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name dev --s3-location bucket=isntyet-deploy,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+
+
     - name: Make zip file
-      run: zip -r ./$GITHUB_SHA.zip .
+      run: zip -qq -r ./$GITHUB_SHA.zip .
       shell: bash
 
     - name: Configure AWS credentials
@@ -48,12 +74,7 @@ jobs:
         aws-region: ${{ secrets.CLOUD_AWS_REGION_STATIC }}
 
     - name: Upload to S3
-      #run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
-      run: aws s3 cp --region ap-northeast-2 homeTmate.zip s3://homehang/homeTmate/homeTmate.zip
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://homehang/$PROJECT_NAME/$GITHUB_SHA.zip
 
-
-출처: https://prohannah.tistory.com/183 [Hello, Hannah!]
-
-# Deploy
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name clelab --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name home_training --s3-location bucket=homehang,bundleType=zip,key=homeTmate/homeTmate.zip
+      run: aws deploy create-deployment --application-name app --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name dev --s3-location bucket=homehang,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip

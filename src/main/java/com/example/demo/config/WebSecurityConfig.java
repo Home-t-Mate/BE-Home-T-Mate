@@ -58,7 +58,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**")
                 .antMatchers("/profile")
                 .antMatchers("/favicon.ico")
-                .antMatchers("/profile");
     }
 
     @Override
