@@ -45,6 +45,7 @@ public class KakaoUserService {
 //        String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback");
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
+
         // 2. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(accessToken);
 
@@ -70,6 +71,7 @@ public class KakaoUserService {
 //            String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback/properties");
 //            String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback/properties");
             String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
+
 
 
             // 2. 유저 정보 업데이트

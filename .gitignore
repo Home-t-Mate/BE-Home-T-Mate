@@ -5,9 +5,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-*.yml
+#*.yml
+#application-credentials.yml
 
-.properties
+*.properties
 ### Java ###
 # Compiled class file
 *.class
