@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 CURRENT_PORT=$(cat /home/ubuntu/service_url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0 echo "> Current port of running WAS is ${CURRENT_PORT}."
@@ -18,7 +18,6 @@ if [ ! -z ${TARGET_PID} ]; then
 
 
 fi
-
 nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/opt/app/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 REPOSITORY=/opt/app
 cd $REPOSITORY
