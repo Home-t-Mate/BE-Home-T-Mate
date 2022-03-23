@@ -29,10 +29,10 @@ IDLE_PROFILE=$(find_idle_profile)
 
 echo "> $JAR_NAME 를 profile=$IDLE_PROFILE 로 실행합니다."
 
-nohup java -jar $REPOSITORY > /dev/null 2> /dev/null < /dev/null &
+#nohup java -jar $REPOSITORY > /dev/null 2> /dev/null < /dev/null &
 
-#nohup java -jar \
-##    -Dspring.config.location=classpath:/application.yml,classpath:/application-$IDLE_PROFILE.yml,/home/ec2-user/app/application-oauth.yml,/home/ec2-user/app/application-real-db.yml \
-#    -Dspring.config.location=classpath:/application.properties,classpath:/application-$IDLE_PROFILE.properties \
-#    -Dspring.profiles.active=$IDLE_PROFILE \
-#    $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar \
+#    -Dspring.config.location=classpath:/application.yml,classpath:/application-$IDLE_PROFILE.yml,/home/ec2-user/app/application-oauth.yml,/home/ec2-user/app/application-real-db.yml \
+    -Dspring.config.location=classpath:/application.properties,classpath:/application-$IDLE_PROFILE.properties \
+    -Dspring.profiles.active=$IDLE_PROFILE \
+    $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
