@@ -15,5 +15,4 @@ public class UserResponseDto{
     private String username;
     private String nickname;
     private String profileImg;
-
 }
