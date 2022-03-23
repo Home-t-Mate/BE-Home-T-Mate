@@ -4,7 +4,7 @@ os: linux
 files:
   - source: /
     destination: /opt/app
-    overwrite: yes
+#     overwrite: yes
 permissions:
   - object: /opt/app/
     owner: ubuntu
