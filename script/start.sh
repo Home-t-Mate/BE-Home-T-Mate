@@ -9,9 +9,9 @@ REPOSITORY=/home/ubuntu/opt/app
 PROJECT_NAME=demo
 
 echo "> Build 파일 복사"
-echo "> $REPOSITORY/zip/*.jar $REPOSITORY"
+echo "> $REPOSITORY/*.jar $REPOSITORY"
 
-cp $REPOSITORY/zip/*.jar $REPOSITORY/
+cp $REPOSITORY/*.jar $REPOSITORY/
 
 echo "> 새 어플리케이션 배포"
 
