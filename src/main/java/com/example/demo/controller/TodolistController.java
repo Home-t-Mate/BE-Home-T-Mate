@@ -19,7 +19,6 @@ public class TodolistController {
 
     @Autowired
     public TodolistController(TodolistService todolistService){
-
         this.todolistService = todolistService;
     }
 
@@ -42,7 +41,8 @@ public class TodolistController {
     }
 
     //Todolist 조회하기
-    @GetMapping("api/todolist")
+    @GetMapping("/api/todolist")
+    @ResponseBody
     public List<Todolist> getlist (@AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userId = userDetails.getUser().getId();
 

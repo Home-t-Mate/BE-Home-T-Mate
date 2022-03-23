@@ -29,12 +29,9 @@ public class UserService {
     //유저 프로필 수정
     @Transactional
     public UserResponseDto updateUserProfile(MultipartFile profileImg,
-                                             UserProfileUpdateDto requestDto,
                                              User user) {
         User dbUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
-        //이미지 제외한 정보 업데이트
-        dbUser.update(requestDto);
 
 
         //프로필 이미지 저장 , 저장 경로 업데이트
@@ -42,12 +39,11 @@ public class UserService {
             //빈 이미지가 아닐때만 기존 이미지 삭제
             if(!dbUser.getProfileImg().equals(defaultImg)){
                 try{
-                    String source = URLDecoder.decode(dbUser.getProfileImg().replace("https://hometmate.s3.ap-northeast-2.amazonaws.com/",""),"UTF-8");
+                    String source = URLDecoder.decode(dbUser.getProfileImg().replace("https://homehang.s3.ap-northeast-2.amazonaws.com/",""),"UTF-8");
                     s3Uploader.deleteFromS3(source);
                 } catch (Exception ignored) {
                 }
             }
-
 
             if(!profileImg.getOriginalFilename().equals("delete")){
                 try{

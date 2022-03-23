@@ -95,9 +95,9 @@ public class User {
 //        this.selfIntro = requestDto.getSelfIntro();
 //    }
 
-    public void update(UserProfileUpdateDto requestDto) {
-        this.nickname = requestDto.getNickname();
-        this.career = requestDto.getCareer();
-        this.selfIntro = requestDto.getSelfIntro();
-    }
+//    public void update(UserProfileUpdateDto requestDto) {
+//        this.nickname = requestDto.getNickname();
+//        this.career = requestDto.getCareer();
+//        this.selfIntro = requestDto.getSelfIntro();
+//    }
 }

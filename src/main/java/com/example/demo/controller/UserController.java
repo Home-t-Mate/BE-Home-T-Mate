@@ -21,20 +21,19 @@ public class UserController {
     private final UserService userService;
 
     //사용자 정보 조회
-    @GetMapping("api/user/info")
+    @GetMapping("/api/user/info")
     public ResponseEntity<UserResponseDto> getUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         return ResponseEntity.ok().body(userService.getUserProfile(user));
     }
 
     //사용자 정보 수정하기
-    @PutMapping("api/user/info")
+    @PutMapping("/api/user/info")
     public ResponseEntity<UserResponseDto> updateUserProfile(@RequestPart(value = "profileImg", required = false)MultipartFile profileImg,
-                                                             @RequestPart(value = "requestDto") UserProfileUpdateDto requestDto,
                                                              @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         User user = userDetails.getUser();
-        UserResponseDto userResponseDto = userService.updateUserProfile(profileImg, requestDto, user);
+        UserResponseDto userResponseDto = userService.updateUserProfile(profileImg, user);
         return ResponseEntity.ok().body(userResponseDto);
 
     }
