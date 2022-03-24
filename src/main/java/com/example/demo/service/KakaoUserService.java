@@ -43,6 +43,8 @@ public class KakaoUserService {
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
 
+
+
         // 2. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(accessToken);
 
@@ -122,19 +124,21 @@ public class KakaoUserService {
         String kakaoId = String.valueOf(jsonNode.get("id").asLong());
         User kakaoUser = userRepository.findByUsername(kakaoId).orElse(null);
 
-        System.out.println("회원가입 진입");
         // 회원가입
         if (kakaoUser == null) {
-            System.out.println("1");
-            System.out.println(jsonNode.get("properties").get("nickname").asText());
             String kakaoNick = jsonNode.get("properties").get("nickname").asText();
-            System.out.println("2");
-            System.out.println("회원가입");
+            String profileImg = jsonNode.get("properties").get("profile_image").asText();
+//            String email = jsonNode.get("kakao_account").get("email").asText();
+//            System.out.println(email);
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            kakaoUser = new User(kakaoId, kakaoNick, encodedPassword);
+//            if(email != null) {
+//            kakaoUser = new User(kakaoId, kakaoNick, encodedPassword, profileImg, email);}
+//            else {
+                kakaoUser = new User(kakaoId, kakaoNick, encodedPassword, profileImg);
+//            }
             userRepository.save(kakaoUser);
         }
 
@@ -147,7 +151,6 @@ public class KakaoUserService {
 
         return UserResponseDto.builder()
                 .userId(user.getId())
-
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .profileImg(user.getProfileImg())

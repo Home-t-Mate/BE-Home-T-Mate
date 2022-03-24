@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+REPOSITORY=/opt/app
+cd $REPOSITORY
+
+APP_NAME=demo
+JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
+JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
+
+
 CURRENT_PORT=$(cat /home/ubuntu/service_url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0 echo "> Current port of running WAS is ${CURRENT_PORT}."
 
@@ -16,9 +25,8 @@ if [ ! -z ${TARGET_PID} ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
   sudo kill ${TARGET_PID}
 
-
 fi
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/opt/app/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
+#nohup java -jar -Dserver.port=${TARGET_PORT} /opt/app/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
+nohup java -jar -Dserver.port=${TARGET_PORT} $JAR_PATH > /home/ubuntu/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
-

@@ -26,78 +26,37 @@ public class User {
     private String password;
 
     @Column
-    private String phoneNum;
-
-    @Column
     private String profileImg;
 
-    @Column
-    private String gender;
-
-    @Column
-    private String ageRange;
-
-    @Column
-    private String career;
-
-    @Column
-    private String selfIntro;
 
     @Column
     private String email;
 
-    // 일반 유저
-//    public User(SignupRequestDto requestDto, String enPassword) {
-//        this.username = requestDto.getUsername();
-//        this.nickname = requestDto.getNickname();
-//        this.phoneNum = requestDto.getPhoneNum();
+
+//    // 카카오 유저
+//    public User(String username, String nickname, String enPassword){
+//        this.username = username;
+//        this.nickname = nickname;
 //        this.password = enPassword;
 //        this.profileImg = "https://skifriendbucket.s3.ap-northeast-2.amazonaws.com/static/defalt+user+frofile.png";
 //    }
 
-    // 카카오 유저
-    public User(String username, String nickname, String enPassword){
+    public User(String username, String nickname, String enPassword, String profileImg, String email){
         this.username = username;
         this.nickname = nickname;
         this.password = enPassword;
-        this.profileImg = "https://skifriendbucket.s3.ap-northeast-2.amazonaws.com/static/defalt+user+frofile.png";
+        this.profileImg = profileImg;
+        this.email = email;
     }
 
-    public void updateKakaoProfile(String ageRange, String gender) {
-        this.ageRange = ageRange;
-        this.gender = gender;
-    }
-
-    // 네이버 유저
-    public User(String username, String nickname, String enPassword, String gender, String ageRange){
+    public User(String username, String nickname, String enPassword, String profileImg){
         this.username = username;
         this.nickname = nickname;
-        this.gender = gender;
-        this.ageRange = ageRange;
         this.password = enPassword;
-        this.profileImg = "https://skifriendbucket.s3.ap-northeast-2.amazonaws.com/static/defalt+user+frofile.png";
+        this.profileImg = profileImg;
     }
 
     public void setProfileImg(String imgPath) {
         this.profileImg = imgPath;
     }
-
-    public void setPhoneNum(String phoneNum) { this.phoneNum = phoneNum; }
-
-//    public void updatePassword(String enPassword) {
-//        this.password = enPassword;
-//    }
-
-//    public void createUserProfile(UserProfileRequestDto requestDto) {
-//        this.gender = requestDto.getGender();
-//        this.ageRange = requestDto.getAgeRange();
-//        this.career = requestDto.getCareer();
-//        this.selfIntro = requestDto.getSelfIntro();
-//    }
-
-//    public void update(UserProfileUpdateDto requestDto) {
-//        this.nickname = requestDto.getNickname();
-//        this.career = requestDto.getCareer();
-//        this.selfIntro = requestDto.getSelfIntro();
-//    }
 }
