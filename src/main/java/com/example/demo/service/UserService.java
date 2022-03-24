@@ -66,7 +66,6 @@ public class UserService {
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .profileImg(user.getProfileImg())
-                .email(user.getEmail())
                 .build();
     }
 }
