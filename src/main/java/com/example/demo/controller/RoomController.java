@@ -25,13 +25,13 @@ public class RoomController {
 
 
     //방 조회
-
     @GetMapping("/rooms")
     @ResponseBody
     public ResponseEntity<List<RoomResponseDto>> room() {
         return ResponseEntity.ok().body(roomService.getRooms());
     }
 
+//  방 조회 페이지 처리(무한스크롤)
     @GetMapping("/roomsscroll")
     @ResponseBody
     public ResponseEntity<List<RoomResponseDto>> roomscrooll(@RequestParam("page") int page,
@@ -41,36 +41,36 @@ public class RoomController {
     ) {
         User user = userDetails.getUser();
         page = page - 1;
-//        return roomService.roomscroll(user, page, size, sortBy, isAsc);
         return ResponseEntity.ok().body(roomService.roomscroll(user, page, size));
 
     }
 
 
-
     //방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ResponseEntity<Room> createRoom(@RequestBody RoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<Room> createRoom(@RequestBody RoomRequestDto requestDto,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return ResponseEntity.ok().body(roomService.createRoom(requestDto, user));
     }
-//
-//    //디테일 페이지 진입입
-//    //enter로 바꿔야함
+
+//  userEnter 테이블 조인(현재 방에 접속 중인 유저 확인 테이블)
    @PostMapping("/room/enter/{roomId}")
    @ResponseBody
-    public ResponseEntity<List<EnterUserResponseDto>> enterRoom(@PathVariable String roomId, @RequestBody RoomPassRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-       System.out.println(requestDto);
-       System.out.println(requestDto.getPassword());
+    public ResponseEntity<List<EnterUserResponseDto>> enterRoom(@PathVariable String roomId,
+                                                                @RequestBody RoomPassRequestDto requestDto,
+                                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok().body(roomService.enterRoom(roomId, requestDto, userDetails.getUser()));
     }
 
 
 
+//    방삭제
    @DeleteMapping("/room/quit/{roomId}")
    @ResponseBody
-   public void quitRoom(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+   public void quitRoom(@PathVariable String roomId,
+                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
        roomService.quitRoom(roomId, user);
    }
@@ -82,11 +82,13 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.getRoom(requestDto));
     }
 
+//    운동중 true, 종료시 false
     @PutMapping("/room/workout")
     public void workout(@RequestBody RoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         roomService.workout(requestDto);
     }
 
+//    room 삭제
     @DeleteMapping("/room/delete/{roomId}")
     public void deleteRoom(@RequestParam String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();

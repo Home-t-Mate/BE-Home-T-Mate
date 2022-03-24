@@ -139,13 +139,9 @@ public class PostService {
         if(!post.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
         }
-   //여기부터 해야함함
         if (post == null) {
             throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다.");
         }
-
-
-
 
         System.out.println("post:" + post);
 

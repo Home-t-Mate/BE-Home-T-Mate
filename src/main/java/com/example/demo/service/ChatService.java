@@ -24,7 +24,6 @@ public class ChatService {
 
 
 //     destination정보에서 roomId 추출
-
     public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         if (lastIndex != -1) {

@@ -11,6 +11,7 @@ public class LoggingController {
     private String version;
 
 
+//    무중단 배포 헬스체크
     @GetMapping("/")
     public String version() {
         return String.format("Project Version : %s", version);

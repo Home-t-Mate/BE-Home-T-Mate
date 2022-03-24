@@ -25,7 +25,6 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        System.out.println("스톰프 호출");
         WebSocketMessageBrokerConfigurer.super.registerStompEndpoints(registry);
         registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*")
 //        registry.addEndpoint("/ws-stomp").setAllowedOrigins("*").setAllowedOriginPatterns("*")
@@ -36,7 +35,6 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 
         @Override
         public void configureClientInboundChannel (ChannelRegistration registration){
-            System.out.println("핸들러 호출");
             registration.interceptors(stompHandler);
         }
 
