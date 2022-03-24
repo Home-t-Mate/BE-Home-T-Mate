@@ -39,9 +39,10 @@ public class KakaoUserService {
     @Transactional
     public SignupSocialDto kakaoLogin(String code) throws IOException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
-//        String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback");
-//         String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback");
+//        String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback");
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
+
+
 
 
         // 2. 필요시에 회원가입
@@ -66,7 +67,6 @@ public class KakaoUserService {
         UserResponseDto userLoginResponseDto;
         if (user.getId() == null) {
             // 1. "인가 코드"로 "액세스 토큰" 요청
-//            String accessToken = getAccessToken(code, "https://3.38.252.235/user/kakao/callback/properties");
 //            String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback/properties");
             String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
 
@@ -95,8 +95,6 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "a0c21ddfb1632beaa7377ac0b91c9849");
-//        body.add("client_id", "dbf70dbcc152160d45ec6ce156a6c37e");
-//        body.add("redirect_uri", "http://3.38.252.235/user/kakao/callback");
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
 //        body.add("redirect_uri", "https://www.act99.shop/user/kakao/callback");
         body.add("code", code);

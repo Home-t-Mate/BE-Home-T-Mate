@@ -183,14 +183,6 @@ public class RoomService {
         return roomRepository.findByName(name) != null;
     }
 
-//    public Page<Room> roomscroll(User user, int page, int size, String sortBy, Boolean isAsc) {
-//        Sort.Direction direction = Sort.Direction.ASC;
-//        Sort sort = Sort.by(direction, sortBy);
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        return roomRepository.findAll(pageable);
-//    }
-
 
     public List<RoomResponseDto> roomscroll(User user, int page, int size) {
 
@@ -212,7 +204,5 @@ public class RoomService {
             ));
         }
         return allRoom;
-
     }
-
 }
