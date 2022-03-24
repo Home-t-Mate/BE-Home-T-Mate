@@ -25,7 +25,6 @@ if [ ! -z ${TARGET_PID} ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
   sudo kill ${TARGET_PID}
 
-
 fi
 #nohup java -jar -Dserver.port=${TARGET_PORT} /opt/app/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
 nohup java -jar -Dserver.port=${TARGET_PORT} $JAR_PATH > /home/ubuntu/nohup.out 2>&1 &

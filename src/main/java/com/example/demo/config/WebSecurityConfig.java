@@ -134,6 +134,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/story");
         skipPathList.add("GET,/livenow");
+        skipPathList.add("GET,/health");
 
         // 채팅
         skipPathList.add("GET,/webjars/**");
