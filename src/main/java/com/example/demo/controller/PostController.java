@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.config.S3Uploader;
 import com.example.demo.dto.ContentRequestDto;
+import com.example.demo.dto.PostsDeleteRequestDto;
 import com.example.demo.dto.postsdto.PostRequestDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
+import com.example.demo.model.Post;
 import com.example.demo.model.Response;
 import com.example.demo.model.User;
 import com.example.demo.security.UserDetailsImpl;
@@ -71,7 +73,7 @@ public class PostController {
 
 
 
-    // 게시글 삭제
+    // 게시글 하나 삭제
     @DeleteMapping("/api/posts/{postId}")
     public Response deletePost(@PathVariable Long postId,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -80,5 +82,13 @@ public class PostController {
         Response response = new Response();
         response.setResult(true);
         return response;
+    }
+
+    // 게시글 여러개 삭제
+    @DeleteMapping("/api/posts")
+    @ResponseBody
+    public void deletePost(@RequestBody List<PostsDeleteRequestDto> postsDeleteRequestDtos,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePosts(postsDeleteRequestDtos, userDetails);
     }
 }

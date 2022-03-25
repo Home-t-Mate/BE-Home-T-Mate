@@ -3,9 +3,9 @@ package com.example.demo.service;
 
 import com.example.demo.config.S3Uploader;
 import com.example.demo.dto.PhotoResponseDto;
+import com.example.demo.dto.PostsDeleteRequestDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
-import com.example.demo.dto.postsdto.PostRequestDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
 import com.example.demo.model.*;
 import com.example.demo.repository.CommentRepository;
@@ -14,16 +14,13 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.PhotoRepository;
 import com.example.demo.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-//import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +33,6 @@ public class PostService {
     private final PhotoRepository photoRepository;
 
 
-
     // 게시글 전체 조회
     public List<PostResponseDto> getPost() {
 
@@ -45,8 +41,7 @@ public class PostService {
         List<PostResponseDto> postResponseDtos = new ArrayList<>();
 
 
-        for (Post post : posts)
-        {
+        for (Post post : posts) {
 
             List<CommentUserDto> commentUserDtos = new ArrayList<>();
             List<LikeUserDto> likeUserDtos = new ArrayList<>();
@@ -62,8 +57,7 @@ public class PostService {
             List<Photo> photos = photoRepository.findByPost(post);
 
 
-            for (Like like : likes)
-            {
+            for (Like like : likes) {
                 LikeUserDto likeUserDto = new LikeUserDto(like);
                 likeUserDtos.add(likeUserDto);
             }
@@ -77,7 +71,6 @@ public class PostService {
                 PhotoResponseDto photoResponseDto = new PhotoResponseDto(photo.getPostImg());
                 photoResponseDtos.add(photoResponseDto);
             }
-
 
 
             PostResponseDto postResponseDto = new PostResponseDto(
@@ -101,7 +94,6 @@ public class PostService {
     }
 
 
-
     // 게시글 작성
     @Transactional
     public Post createPost(String content, List<MultipartFile> multipartFile, User user) throws IOException {
@@ -121,7 +113,7 @@ public class PostService {
 //        Post post = new Post(content, user);
         Post post = postRepository.save(new Post(content, user));
 
-        for(MultipartFile image : multipartFile) {
+        for (MultipartFile image : multipartFile) {
             String postImg = s3Uploader.upload(image, "static");
             Photo photo = new Photo(postImg, post);
             photoRepository.save(photo);
@@ -136,7 +128,7 @@ public class PostService {
 
         System.out.println(content);
         System.out.println(multipartFile);
-        if(!post.getUser().getId().equals(user.getId())) {
+        if (!post.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
         }
         if (post == null) {
@@ -148,7 +140,7 @@ public class PostService {
         photoRepository.deleteByPost(post);
 
         post.update(content, user);
-        for(MultipartFile image : multipartFile) {
+        for (MultipartFile image : multipartFile) {
             String postImg = s3Uploader.upload(image, "static");
             Photo photo = new Photo(postImg, post);
             photoRepository.save(photo);
@@ -165,15 +157,52 @@ public class PostService {
         User user = post.getUser();
         Long deleteId = user.getId();
         if (!Objects.equals(userDetails.getUser().getId(), deleteId)) {
-            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
         }
         List<Comment> comments = commentRepository.findAllByPost(post);
         for (Comment comment : comments) {
             commentRepository.deleteById(comment.getId());
         }
         likeRepository.deleteByPost(post);
-        postRepository.deleteById(postId);
+        postRepository.delete(post);
         photoRepository.deleteByPost(post);
         return postId;
+    }
+
+    @Transactional
+    public void deletePosts(List<PostsDeleteRequestDto> postsDeleteRequestDtos, UserDetailsImpl userDetails) {
+
+        for (PostsDeleteRequestDto postsDeleteRequestDto : postsDeleteRequestDtos) {
+            System.out.println(postsDeleteRequestDto.getPostId());
+            Long postId = postsDeleteRequestDto.getPostId();
+            Post post = postRepository.findById(postId).orElseThrow(
+                    () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+            );
+
+            System.out.println("진입1");
+            User user = post.getUser();
+            Long deleteId = user.getId();
+            if (!Objects.equals(userDetails.getUser().getId(), deleteId)) {
+                throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+            }
+
+            List<Comment> comments = commentRepository.findAllByPost(post);
+            for (Comment comment : comments) {
+                commentRepository.deleteById(comment.getId());
+            }
+
+            List<Like> likes = likeRepository.findAllByPost(post);
+            for (Like like : likes) {
+                likeRepository.deleteById(like.getId());
+            }
+
+            List<Photo> photos = photoRepository.findAllByPost(post);
+            for (Photo photo : photos) {
+                photoRepository.deleteById(photo.getId());
+            }
+
+            postRepository.delete(post);
+
+        }
     }
 }
