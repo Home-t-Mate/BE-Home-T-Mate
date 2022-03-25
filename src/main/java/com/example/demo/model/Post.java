@@ -4,6 +4,8 @@ import com.example.demo.dto.postsdto.PostRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Builder
@@ -19,7 +21,6 @@ public class Post extends Timestamped {
     @Id
     private Long id;
 
-
     @Column()
     private String postImg;
     // 내용
@@ -27,6 +28,9 @@ public class Post extends Timestamped {
     @Column()
     private String content;
 
+//    @OneToMany
+//    @JoinColumn()
+//    private List<Like> like = new ArrayList<>();
 
     // 사용자
 //            (fetch = FetchType.LAZY)

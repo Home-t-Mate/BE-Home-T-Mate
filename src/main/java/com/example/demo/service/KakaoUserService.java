@@ -39,6 +39,7 @@ public class KakaoUserService {
     @Transactional
     public SignupSocialDto kakaoLogin(String code) throws IOException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
+
        String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback");
 //         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
@@ -67,8 +68,8 @@ public class KakaoUserService {
         UserResponseDto userLoginResponseDto;
         if (user.getId() == null) {
             // 1. "인가 코드"로 "액세스 토큰" 요청
-           String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback/properties");
-//             String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
+            String accessToken = getAccessToken(code, "https://www.act99.shop/user/kakao/callback/properties");
+//            String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
 
 
 
@@ -126,13 +127,17 @@ public class KakaoUserService {
 
         // 회원가입
         if (kakaoUser == null) {
+            String profileImg = "";
             String kakaoNick = jsonNode.get("properties").get("nickname").asText();
-            String profileImg = jsonNode.get("properties").get("profile_image").asText();
-//            String email = jsonNode.get("kakao_account").get("email").asText();
-//            System.out.println(email);
-            // password: random UUID
+            System.out.println(kakaoNick);
             String password = UUID.randomUUID().toString();
+            System.out.println(password);
             String encodedPassword = passwordEncoder.encode(password);
+            if(jsonNode.get("properties").get("profile_image") == null) {
+               profileImg = "https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/profile.png";
+            } else {
+                profileImg = jsonNode.get("properties").get("profile_image").asText();
+            }
 
 //            if(email != null) {
 //            kakaoUser = new User(kakaoId, kakaoNick, encodedPassword, profileImg, email);}
