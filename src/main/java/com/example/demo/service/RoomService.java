@@ -29,7 +29,7 @@ public class RoomService {
     public Room createRoom(RoomRequestDto requestDto, User user) {
 
         if (requestDto.getRoomImg() == null) {
-            requestDto.setRoomImg("https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/room.png");
+            requestDto.setRoomImg("https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/roomdefault.png");
         }
         System.out.println("이미지 통과");
 
