@@ -123,7 +123,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 홈
         skipPathList.add("GET,/");
-
+        skipPathList.add("GET,/story");
+        skipPathList.add("GET,/livenow");
+        skipPathList.add("GET,/health");
 
         skipPathList.add("GET,/user/loginView");
 
@@ -132,9 +134,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/user/kakao/callback/{userId}");
         skipPathList.add("GET,/user/naver/callback");
 
-        skipPathList.add("GET,/story");
-        skipPathList.add("GET,/livenow");
-        skipPathList.add("GET,/health");
+
 
         // 채팅
         skipPathList.add("GET,/webjars/**");
