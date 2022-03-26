@@ -65,6 +65,9 @@ public class ChatService {
             roomRepository.save(room);
         }
 
+        if(ChatMessage.MessageType.VIDEOON.equals(chatMessage.getType())) {
+            ChatMessage.builder().type(ChatMessage.MessageType.ENTER);
+        }
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
 //    }

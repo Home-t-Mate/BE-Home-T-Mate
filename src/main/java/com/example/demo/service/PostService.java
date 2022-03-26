@@ -98,19 +98,15 @@ public class PostService {
     @Transactional
     public Post createPost(String content, List<MultipartFile> multipartFile, User user) throws IOException {
 
-//        if (postRequestDto.getPostImg() == null) {
-//            throw new IllegalArgumentException("이미지를 넣어주세요.");
-//        }
-//
-//        System.out.println("1차 break");
-//        String content = postRequestDto.getContent();
-//        if (postRequestDto.getContent() == null) {
-//            throw new IllegalArgumentException("내용을 입력해주세요.");
-//        }
-//        if (content.length() > 600) {
-//            throw new IllegalArgumentException("600자 이하로 입력해주세요.");
-//        }
-//        Post post = new Post(content, user);
+        if (multipartFile == null) {
+            throw new IllegalArgumentException("이미지를 넣어주세요.");
+        }
+        if (content == null) {
+            throw new IllegalArgumentException("내용을 입력해주세요.");
+        }
+        if (content.length() > 600) {
+            throw new IllegalArgumentException("600자 이하로 입력해주세요.");
+        }
         Post post = postRepository.save(new Post(content, user));
 
         for (MultipartFile image : multipartFile) {
@@ -179,7 +175,6 @@ public class PostService {
                     () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
             );
 
-            System.out.println("진입1");
             User user = post.getUser();
             Long deleteId = user.getId();
             if (!Objects.equals(userDetails.getUser().getId(), deleteId)) {

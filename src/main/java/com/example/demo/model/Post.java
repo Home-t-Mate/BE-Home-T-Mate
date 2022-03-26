@@ -25,7 +25,7 @@ public class Post extends Timestamped {
     private String postImg;
     // 내용
 
-    @Column()
+    @Column(length = 600)
     private String content;
 
 //    @OneToMany
