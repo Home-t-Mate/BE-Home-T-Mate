@@ -27,8 +27,7 @@ if [ ! -z ${TARGET_PID} ]; then
 
 fi
 #nohup java -jar -Dserver.port=${TARGET_PORT} /opt/app/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
-nohup java -jar \
--Dspring.config.location=/opt/properties/application.properties \
--Dserver.port=${TARGET_PORT} $JAR_PATH > /home/ubuntu/nohup.out 2>&1 &
+nohup java -jar -Dserver.port=${TARGET_PORT} $JAR_PATH > /home/ubuntu/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
+
