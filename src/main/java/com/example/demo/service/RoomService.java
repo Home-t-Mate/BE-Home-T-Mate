@@ -184,8 +184,7 @@ public class RoomService {
     }
 
 
-    public List<RoomResponseDto> roomscroll(User user, int page, int size) {
-
+    public List<RoomResponseDto> roomscroll(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Room> rooms = roomRepository.findAllByOrderByCreatedAtDesc(pageable);
