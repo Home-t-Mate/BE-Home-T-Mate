@@ -166,7 +166,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://act99.shop"); // local 테스트 시
+//         configuration.addAllowedOrigin("https://act99.shop"); // local 테스트 시
+        configuration.addAllowedOrigin("https://hometmate.com");
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
