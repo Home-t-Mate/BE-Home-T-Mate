@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.model.ChatMessage;
+import com.example.demo.model.EnterUser;
 import com.example.demo.model.Room;
+import com.example.demo.model.User;
+import com.example.demo.repository.EnterUserRepository;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.util.TimeConversion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +25,8 @@ public class ChatService {
     private final RedisTemplate redisTemplate;
     private final RedisRepository redisRepository;
     private final RoomRepository roomRepository;
+    private final EnterUserRepository enterUserRepository;
+    private final UserRepository userRepository;
 
 
 //     destination정보에서 roomId 추출
@@ -46,6 +52,10 @@ public class ChatService {
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
+
+            User user = userRepository.findByNickname(chatMessage.getSender());
+            Optional<Room> room = roomRepository.findByroomId(chatMessage.getRoomId());
+            enterUserRepository.deleteByRoomAndUser(room, user);
         }
 
         if(ChatMessage.MessageType.YOUTUBEURL.equals(chatMessage.getType())) {

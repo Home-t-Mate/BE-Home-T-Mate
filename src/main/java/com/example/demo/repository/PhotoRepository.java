@@ -11,7 +11,5 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     Long deleteByPost(Post post);
 
-    void deleteAllByPost(Post post);
-
     List<Photo> findAllByPost(Post post);
 }

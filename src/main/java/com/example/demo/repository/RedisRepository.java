@@ -38,8 +38,7 @@ public class RedisRepository {
 
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
-    public void setUserEnterInfo(String sessionId, String roomId) {
-        hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);
+    public void setUserEnterInfo(String sessionId, String roomId) { hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);
     }
     // 유저 세션으로 입장해 있는 채팅방 ID 조회
     public String getUserEnterRoomId(String sessionId) {

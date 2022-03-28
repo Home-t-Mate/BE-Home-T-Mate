@@ -17,6 +17,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public class StompHandler implements ChannelInterceptor {
     private final ChatService chatService;
     private final RedisRepository redisRepository;
     private final RoomRepository roomRepository;
+    private final UserRepository userRepository;
+    private final EnterUserRepository enterUserRepository;
 
 
     @Override
@@ -73,7 +76,6 @@ public class StompHandler implements ChannelInterceptor {
 
 
             System.out.println("roomid:" + roomId);
-//            Room room = roomRepository.findByroomId(roomId);
             if (roomId != null) {
                 Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다.(DISCONNECT)"));
                 room.setUserCount(redisRepository.getUserCount(roomId));
@@ -82,11 +84,16 @@ public class StompHandler implements ChannelInterceptor {
 
 
             String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
-//            Long roomId = Long.valueOf(redisRepository.getSessionUserInfo(sessionId));
             redisRepository.removeUserEnterInfo(sessionId);
-//            System.out.println(redisRepository.getUserCount(Long.valueOf(roomId)));
-            System.out.println(redisRepository.getUserCount(roomId));
-            System.out.println("맵핑 정보 삭제");
+
+
+            //유튜브 켜고 방 나왔을 때, 방 인원이 0명이면 false로
+            if(redisRepository.getUserCount(roomId) == 0) {
+                Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
+                room.setWorkOut(false);
+                roomRepository.save(room);
+            }
+
         }
         return message;
     }
