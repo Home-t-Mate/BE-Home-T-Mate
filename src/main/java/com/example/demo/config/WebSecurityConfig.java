@@ -123,7 +123,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 홈
         skipPathList.add("GET,/");
-//         skipPathList.add("GET,/chat/roomsscroll");
+         skipPathList.add("GET,/chat/roomsscroll");
 //         skipPathList.add("GET,/chat/roomsscroll/**");
         
 
