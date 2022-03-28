@@ -35,13 +35,11 @@ public class RoomController {
     @GetMapping("/roomsscroll")
     @ResponseBody
     public ResponseEntity<List<RoomResponseDto>> roomscrooll(@RequestParam("page") int page,
-                                                             @RequestParam("size") int size,
-                                                             @AuthenticationPrincipal UserDetailsImpl userDetails
+                                                             @RequestParam("size") int size
 
     ) {
-        User user = userDetails.getUser();
         page = page - 1;
-        return ResponseEntity.ok().body(roomService.roomscroll(user, page, size));
+        return ResponseEntity.ok().body(roomService.roomscroll(page, size));
 
     }
 
