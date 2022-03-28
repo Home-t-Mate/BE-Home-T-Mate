@@ -124,6 +124,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 홈
         skipPathList.add("GET,/");
         skipPathList.add("GET,/chat/roomsscroll");
+        skipPathList.add("GET,/chat/roomsscroll/**");
 
         skipPathList.add("GET,/story");
         skipPathList.add("GET,/livenow");
@@ -131,7 +132,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/health");
         skipPathList.add("GET,/room/search");
-
+        skipPathList.add("GET,/chat/rooms");
         skipPathList.add("GET,/user/loginView");
 
         // 회원 관리 API 허용
