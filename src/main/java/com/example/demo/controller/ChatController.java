@@ -30,7 +30,7 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("Authorization") String token) {
+    public void message(ChatMessage message, @Header("Authorization") String token) throws InterruptedException {
 //        String nickname = jwtTokenProvider.getUserNameFromJwt(token);
         // 로그인 회원 정보로 대화명 설정
 //        System.out.println(token);
@@ -44,9 +44,9 @@ public class ChatController {
 
     }
 
-    @EventListener
-    public void onDiscoonectEvent(SessionDisconnectEvent event) {
-
-        System.out.println(event);
-    }
+//    @EventListener
+//    public void onDiscoonectEvent(SessionDisconnectEvent event) {
+//
+//        System.out.println(event);
+//    }
 }

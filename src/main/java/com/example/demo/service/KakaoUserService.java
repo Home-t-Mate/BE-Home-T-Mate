@@ -128,9 +128,7 @@ public class KakaoUserService {
         if (kakaoUser == null) {
             String profileImg = "";
             String kakaoNick = jsonNode.get("properties").get("nickname").asText();
-            System.out.println(kakaoNick);
             String password = UUID.randomUUID().toString();
-            System.out.println(password);
             String encodedPassword = passwordEncoder.encode(password);
             if(jsonNode.get("properties").get("profile_image") == null) {
                profileImg = "https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/profile.png";

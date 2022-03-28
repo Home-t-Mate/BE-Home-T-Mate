@@ -39,7 +39,6 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            System.out.println("커넥션 진입");
             jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
 
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
@@ -52,7 +51,11 @@ public class StompHandler implements ChannelInterceptor {
             String name = jwtDecoder.decodeNickname(accessor.getFirstNativeHeader("Authorization").substring(7));
 
 
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
+            try {
+                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 //            System.out.println("5");
 //            System.out.println("SUBSCRIBE 클라이언트 헤더" + message.getHeaders());
 //            System.out.println("SUBSCRIBE 클라이언트 세션 아이디" + sessionId);

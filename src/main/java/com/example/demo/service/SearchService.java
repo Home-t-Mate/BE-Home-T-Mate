@@ -28,7 +28,6 @@ public class SearchService {
 
         //방 만든 사람 기준으로 검색
         if (users != null) {
-            System.out.println("방만든 사람 진입");
             for(User user : users) {
                 System.out.println(user.getNickname());
                 List<Room> roomUsers = roomRepository.findByUser(user);
@@ -52,8 +51,6 @@ public class SearchService {
         //방 이름 기준으로 검색
         if (roomNames != null) {
             for (Room room : roomNames) {
-                System.out.println("room이름 검색");
-                System.out.println("roomname: " + room.getName());
                 allRooms.add(new RoomResponseDto(
                         room.getName(),
                         room.getRoomId(),

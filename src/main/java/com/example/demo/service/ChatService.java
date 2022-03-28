@@ -40,12 +40,13 @@ public class ChatService {
     }
 
 
-    public void sendChatMessage(ChatMessage chatMessage) {
+    public void sendChatMessage(ChatMessage chatMessage) throws InterruptedException {
 
         chatMessage.setUserCount(redisRepository.getUserCount(chatMessage.getRoomId()));
 
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
+            Thread.sleep(3000);
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
 
