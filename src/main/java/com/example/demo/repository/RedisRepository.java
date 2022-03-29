@@ -17,6 +17,8 @@ public class RedisRepository {
     private static final String CHAT_ROOMS = "CHAT_ROOM"; // 채팅룸 저장
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
+    public static final String USER_NICKNAME = "USER_NICKNAME"; // 채팅룸에 입장한 유저 닉네임
+
 
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, Room> hashOpsChatRoom;
@@ -35,7 +37,14 @@ public class RedisRepository {
         return hashOpsChatRoom.get(CHAT_ROOMS, id);
     }
 
+    public void setNickname(String sessionId, String nickname) {
+        hashOpsEnterInfo.put(USER_NICKNAME, sessionId, nickname);
+    }
 
+    /* 세션에서 유저 닉네임 로드 */
+    public String getNickname(String sessionId) {
+        return hashOpsEnterInfo.get(USER_NICKNAME, sessionId);
+    }
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
     public void setUserEnterInfo(String sessionId, String roomId) { hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);

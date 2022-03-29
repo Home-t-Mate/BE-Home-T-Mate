@@ -30,8 +30,7 @@ public class StompHandler implements ChannelInterceptor {
     private final ChatService chatService;
     private final RedisRepository redisRepository;
     private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
-    private final EnterUserRepository enterUserRepository;
+
 
 
     @Override
@@ -40,7 +39,6 @@ public class StompHandler implements ChannelInterceptor {
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
             jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
-
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             String roomId = chatService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             String sessionId = (String) message.getHeaders().get("simpSessionId");
@@ -50,18 +48,13 @@ public class StompHandler implements ChannelInterceptor {
 //            String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
             String name = jwtDecoder.decodeNickname(accessor.getFirstNativeHeader("Authorization").substring(7));
 
-
+            redisRepository.setNickname(sessionId, name);
             try {
                 chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            System.out.println("5");
-//            System.out.println("SUBSCRIBE 클라이언트 헤더" + message.getHeaders());
-//            System.out.println("SUBSCRIBE 클라이언트 세션 아이디" + sessionId);
-//            System.out.println("SUBSCRIBE 클라이언트 유저 이름: " + name);
-//                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
-            System.out.println(redisRepository.getUserCount("roomId:" +  roomId));
+
 
             if (roomId != null) {
                 Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
@@ -74,21 +67,21 @@ public class StompHandler implements ChannelInterceptor {
 //            System.out.println("DISCONNECT 클라이언트 sessionId: " + sessionId);
 
             String roomId = redisRepository.getUserEnterRoomId(sessionId);
-
+            String name = redisRepository.getNickname(sessionId);
+//            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
             redisRepository.minusUserCount(roomId);
+            System.out.println(name);
+            try {
+                chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-
-            System.out.println("roomid:" + roomId);
             if (roomId != null) {
                 Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다.(DISCONNECT)"));
                 room.setUserCount(redisRepository.getUserCount(roomId));
                 roomRepository.save(room);
             }
-
-
-            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
-            redisRepository.removeUserEnterInfo(sessionId);
-
 
             //유튜브 켜고 방 나왔을 때, 방 인원이 0명이면 false로
             if(redisRepository.getUserCount(roomId) == 0) {
@@ -97,6 +90,8 @@ public class StompHandler implements ChannelInterceptor {
                 roomRepository.save(room);
             }
 
+            redisRepository.removeUserEnterInfo(sessionId);
+            log.info("DISCONNECTED {}, {}", sessionId, roomId);
         }
         return message;
     }
