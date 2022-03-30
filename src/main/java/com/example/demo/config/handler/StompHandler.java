@@ -93,6 +93,7 @@ public class StompHandler implements ChannelInterceptor {
 
             User user = userRepository.findByNickname(name);
             if(enterUserRepository.findByRoomAndUser(room, user) != null) {
+
                 log.info("USERENTER_DELETE {}, {}", name, roomId);
                 enterUserRepository.deleteByRoomAndUser(room, user);
             }
