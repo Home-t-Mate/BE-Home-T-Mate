@@ -64,7 +64,7 @@ public class RoomController {
 
 
 
-//    방삭제
+//    enterUser 삭제
    @DeleteMapping("/room/quit/{roomId}")
    @ResponseBody
    public void quitRoom(@PathVariable String roomId,

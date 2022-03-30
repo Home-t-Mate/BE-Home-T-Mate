@@ -46,7 +46,7 @@ public class ChatService {
 
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
 

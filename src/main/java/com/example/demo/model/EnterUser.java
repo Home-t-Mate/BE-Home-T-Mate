@@ -17,9 +17,8 @@ public class EnterUser extends Timestamped {
     @JoinColumn
     private User user;
 
-
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "room_id")
     private Room room;
 
     public EnterUser(User user, Room room) {
