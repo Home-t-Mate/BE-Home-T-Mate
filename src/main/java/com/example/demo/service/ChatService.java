@@ -9,6 +9,7 @@ import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.TimeConversion;
+import freemarker.template.utility.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -61,8 +62,17 @@ public class ChatService {
         if(ChatMessage.MessageType.YOUTUBEURL.equals(chatMessage.getType())) {
             Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
             room.setWorkOut(true);
+            String[] arr = StringUtil.split(room.getRoomImg(), '/');
+
+            //유저가 직접 지정한 방 이미지가 아니라면 유튜브 썸네일을 방 이미지로 저장
+            if(!arr[3].equals("static")) {
+                String Thumbnail = "https://img.youtube.com/vi/" + chatMessage.getMessage().substring(chatMessage.getMessage().lastIndexOf("/") + 1) + "/mqdefault.jpg";
+                room.setRoomImg(Thumbnail);
+            }
+
             roomRepository.save(room);
         }
+
         if(ChatMessage.MessageType.YOUTUBESTOP.equals(chatMessage.getType())) {
             Room room = roomRepository.findByroomId(chatMessage.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
             room.setWorkOut(false);

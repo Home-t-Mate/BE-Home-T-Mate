@@ -67,8 +67,8 @@ public class KakaoUserService {
         UserResponseDto userLoginResponseDto;
         if (user.getId() == null) {
             // 1. "인가 코드"로 "액세스 토큰" 요청
-//            String accessToken = getAccessToken(code, "https://www.hometmate.com/user/kakao/callback/properties");
-            String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
+            String accessToken = getAccessToken(code, "https://www.hometmate.com/user/kakao/callback/properties");
+//            String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback/properties");
 
 
 
