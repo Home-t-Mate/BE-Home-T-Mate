@@ -64,10 +64,14 @@ public class ChatService {
             room.setWorkOut(true);
             String[] arr = StringUtil.split(room.getRoomImg(), '/');
 
+            System.out.println(chatMessage.getMessage().substring(chatMessage.getMessage().lastIndexOf("/") + 1));
             //유저가 직접 지정한 방 이미지가 아니라면 유튜브 썸네일을 방 이미지로 저장
             if(!arr[3].equals("static")) {
+
                 String Thumbnail = "https://img.youtube.com/vi/" + chatMessage.getMessage().substring(chatMessage.getMessage().lastIndexOf("/") + 1) + "/mqdefault.jpg";
-                room.setRoomImg(Thumbnail);
+                String result = Thumbnail.replace("watch?v=", "");
+                System.out.println(result);
+                room.setRoomImg(result);
             }
 
             roomRepository.save(room);

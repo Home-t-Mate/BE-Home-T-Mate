@@ -140,6 +140,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/story");
         skipPathList.add("GET,/livenow");
         skipPathList.add("GET,/api/posts");
+        skipPathList.add("GET,/api/comments/{postId}");
 
         skipPathList.add("GET,/health");
         skipPathList.add("GET,/room/search");
