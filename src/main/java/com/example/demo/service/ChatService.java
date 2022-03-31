@@ -53,13 +53,9 @@ public class ChatService {
         }
         if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
 
-            System.out.println("quit 동작");
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
 
-//            User user = userRepository.findByNickname(chatMessage.getSender());
-//            Optional<Room> room = roomRepository.findByroomId(chatMessage.getRoomId());
-//            enterUserRepository.deleteByRoomAndUser(room, user);
         }
 
         if(ChatMessage.MessageType.YOUTUBEURL.equals(chatMessage.getType())) {
@@ -84,7 +80,6 @@ public class ChatService {
         }
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
-//    }
     }
 }
 

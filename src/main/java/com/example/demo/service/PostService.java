@@ -122,8 +122,6 @@ public class PostService {
 
         Post post = postRepository.getById(postId);
 
-        System.out.println(content);
-        System.out.println(multipartFile);
         if (!post.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
         }
@@ -131,7 +129,6 @@ public class PostService {
             throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다.");
         }
 
-        System.out.println("post:" + post);
 
         photoRepository.deleteByPost(post);
 
@@ -169,7 +166,6 @@ public class PostService {
     public void deletePosts(List<PostsDeleteRequestDto> postsDeleteRequestDtos, UserDetailsImpl userDetails) {
 
         for (PostsDeleteRequestDto postsDeleteRequestDto : postsDeleteRequestDtos) {
-            System.out.println(postsDeleteRequestDto.getPostId());
             Long postId = postsDeleteRequestDto.getPostId();
             Post post = postRepository.findById(postId).orElseThrow(
                     () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")

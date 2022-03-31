@@ -58,8 +58,6 @@ public class PostController {
                            @PathVariable Long postId,
                            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws IOException {
-        System.out.println(content);
-        System.out.println(multipartFiles);
         User user = userDetails.getUser();
         postService.updatePost(multipartFiles, content, postId, user);
     }

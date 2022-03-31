@@ -29,7 +29,6 @@ public class SignupController {
     @GetMapping("/user/kakao/callback")
     public Long kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
-        System.out.println(code);
         SignupSocialDto signupKakaoDto = kakaoUserService.kakaoLogin(code);
         response.addHeader(AUTH_HEADER, signupKakaoDto.getToken());
 

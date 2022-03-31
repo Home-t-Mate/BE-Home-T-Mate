@@ -31,12 +31,10 @@ public class RoomService {
         if (requestDto.getRoomImg() == null) {
             requestDto.setRoomImg("https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/roomdefault.png");
         }
-        System.out.println("이미지 통과");
 
         if (roomRepository.findByName(requestDto.getName()) != null) {
             throw new IllegalArgumentException("이미 존재하는 방 이름입니다.");
         }
-        System.out.println("방 생성 통과");
 
         if (requestDto.getName() == null) {
             throw new IllegalArgumentException("룸 이름을 입력해주세요.");

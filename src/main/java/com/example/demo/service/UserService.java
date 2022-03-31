@@ -38,7 +38,6 @@ public class UserService {
         if(profileImg != null){
             //빈 이미지가 아닐때만 기존 이미지 삭제
             if(!dbUser.getProfileImg().equals(defaultImg)){
-                System.out.println("이미지 진입");
                 try{
                     String source = URLDecoder.decode(dbUser.getProfileImg().replace("https://homehang.s3.ap-northeast-2.amazonaws.com/",""),"UTF-8");
                     s3Uploader.deleteFromS3(source);

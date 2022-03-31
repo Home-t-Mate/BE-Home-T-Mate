@@ -31,11 +31,8 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessage message, @Header("Authorization") String token) throws InterruptedException {
-//        String nickname = jwtTokenProvider.getUserNameFromJwt(token);
-        // 로그인 회원 정보로 대화명 설정
-//        System.out.println(token);
+
         token = token.substring(7);
-//        message.setSender(jwtDecoder.decodeUsername(token));
         message.setSender(jwtDecoder.decodeNickname(token));
         message.setProfileImg(jwtDecoder.decodeprofileImg(token));
         message.setUserCount(redisRepository.getUserCount(message.getRoomId()));
@@ -43,10 +40,4 @@ public class ChatController {
         chatService.sendChatMessage(message);
 
     }
-
-//    @EventListener
-//    public void onDiscoonectEvent(SessionDisconnectEvent event) {
-//
-//        System.out.println(event);
-//    }
 }

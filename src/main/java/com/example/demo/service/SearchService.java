@@ -29,7 +29,6 @@ public class SearchService {
         //방 만든 사람 기준으로 검색
         if (users != null) {
             for(User user : users) {
-                System.out.println(user.getNickname());
                 List<Room> roomUsers = roomRepository.findByUser(user);
                 for (Room room : roomUsers) {
                     allRooms.add(new RoomResponseDto(

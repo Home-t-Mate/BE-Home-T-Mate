@@ -28,7 +28,6 @@ public class S3Uploader {
     public String bucket;
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException{
-        System.out.println(multipartFile);
         File uploadFile = convert(multipartFile)          // 파일 변환이 안되면 에러
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
 
@@ -37,7 +36,6 @@ public class S3Uploader {
 
     //S3로 파일 업로드하기
     private String upload(File uploadFile, String dirName){
-
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();    // S3에 저장된 파일 이름
         String uploadImgUrl = putS3(uploadFile, fileName);       // S3로 업로드
         removeNewFile(uploadFile);
