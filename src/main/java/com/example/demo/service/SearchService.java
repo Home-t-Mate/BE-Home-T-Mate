@@ -18,8 +18,6 @@ public class SearchService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
-
-
     public List<RoomResponseDto> search(String keyword) {
 
         List<Room> roomNames = roomRepository.findByNameContainingIgnoreCase(keyword);

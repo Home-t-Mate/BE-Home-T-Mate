@@ -18,7 +18,9 @@ public class LikeController {
 
 //    like (좋아요) 누르기
     @PostMapping("/api/like/{postId}")
-    public LikeResponseDto Like(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public LikeResponseDto Like(@PathVariable Long postId,
+                                @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         return likeService.addLike(postId, userDetails.getUser().getId());
     }
 }

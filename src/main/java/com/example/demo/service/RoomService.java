@@ -26,7 +26,7 @@ public class RoomService {
     private final int LIMIT = 5;
 
     //방 생성
-    public Room createRoom(RoomRequestDto requestDto, User user) {
+    public RoomResponseDto createRoom(RoomRequestDto requestDto, User user) {
 
         if (requestDto.getRoomImg() == null) {
             requestDto.setRoomImg("https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/roomdefault.png");
@@ -37,13 +37,24 @@ public class RoomService {
         }
 
         if (requestDto.getName() == null) {
-            throw new IllegalArgumentException("룸 이름을 입력해주세요.");
+            throw new IllegalArgumentException("방 이름을 입력해주세요.");
         }
         Room room = Room.create(requestDto, user);
         boolean passworkCheck = requestDto.getPassword() != "" ? true : false;
         room.setPassCheck(passworkCheck);
+        Room createRoom = roomRepository.save(room);
 
-        return roomRepository.save(room);
+        String name = createRoom.getName();
+        String roomId = createRoom.getRoomId();
+        String roomImg = createRoom.getRoomImg();
+        String content = createRoom.getContent();
+        Long userCount = 0L;
+        Boolean passCheck = createRoom.getPassCheck();
+        Boolean workOut = createRoom.getWorkOut();
+        String nickname = createRoom.getUser().getNickname();
+        String profileImg = createRoom.getUser().getProfileImg();
+
+        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
     }
 
 
@@ -91,18 +102,6 @@ public class RoomService {
     }
 
 
-
-//        String name = room.getName();
-//        String roomImg = room.getRoomImg();
-//        String content = room.getContent();
-//        Long userCount = redisRepository.getUserCount(roomId);
-//        Boolean passCheck = room.getPassCheck();
-//        Boolean workOut = room.getWorkOut();
-//        String nickname = room.getUser().getNickname();
-//        String profileImg = room.getUser().getProfileImg();
-//        return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
-//
-//    }
 
 
     //전체 방 조회

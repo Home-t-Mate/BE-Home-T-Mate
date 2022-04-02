@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.commentdto.CommentIdDto;
 import com.example.demo.dto.commentdto.CommentRequestDto;
 import com.example.demo.dto.commentdto.CommentResponseDto;
 import com.example.demo.model.Comment;
@@ -27,7 +28,7 @@ public class CommentService {
 
     //댓글 작성
     @Transactional
-    public Comment createComment(
+    public CommentIdDto createComment(
             Long postId,
             CommentRequestDto requestDto,
             UserDetailsImpl userDetails,
@@ -42,7 +43,8 @@ public class CommentService {
             throw  new IllegalArgumentException(bindingResult.getFieldError().getDefaultMessage());
         } else {
             Comment comment = new Comment(requestDto,post,user);
-            return commentRepository.save(comment);
+            Long Id = commentRepository.save(comment).getId();
+            return new CommentIdDto(Id);
         }
     }
 

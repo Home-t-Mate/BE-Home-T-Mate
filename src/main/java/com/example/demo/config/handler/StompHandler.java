@@ -93,11 +93,10 @@ public class StompHandler implements ChannelInterceptor {
                 }
 
                 User user = userRepository.findByNickname(name);
-                if (enterUserRepository.findByRoomAndUser(room, user) != null) {
+                if (enterUserRepository.findByRoomAndUser(room, user).getRoom().getRoomId().equals(roomId)) {
                     EnterUser enterUser = enterUserRepository.findByRoomAndUser(room, user);
                     enterUserRepository.delete(enterUser);
                     log.info("USERENTER_DELETE {}, {}", name, roomId);
-
                 }
 
                 redisRepository.removeUserEnterInfo(sessionId);

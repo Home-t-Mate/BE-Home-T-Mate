@@ -27,12 +27,13 @@ public class SignupController {
 
     // 카카오 회원가입
     @GetMapping("/user/kakao/callback")
-    public Long kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
+    public SignupSocialDto kakaoLogin(@RequestParam String code, HttpServletResponse response)
+            throws IOException {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
         SignupSocialDto signupKakaoDto = kakaoUserService.kakaoLogin(code);
         response.addHeader(AUTH_HEADER, signupKakaoDto.getToken());
 
-        return signupKakaoDto.getUserId();
+        return signupKakaoDto;
     }
 
     // 카카오 프로필 업데이트

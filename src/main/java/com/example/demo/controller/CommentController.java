@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.commentdto.CommentIdDto;
 import com.example.demo.dto.commentdto.CommentRequestDto;
 import com.example.demo.dto.commentdto.CommentResponseDto;
+import com.example.demo.model.Comment;
 import com.example.demo.model.Response;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.CommentService;
@@ -28,17 +30,13 @@ public class CommentController {
 
     // 댓글 작성.
     @PostMapping("/api/comments/{postId}")
-    public Response createComment(
+    public CommentIdDto createComment(
             @PathVariable Long postId,
             @Validated @RequestBody CommentRequestDto requestDto,
             BindingResult bindingResult,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        commentService.createComment(postId,requestDto,userDetails,bindingResult);
-
-        Response response = new Response();
-        response.setResult(true);
-        return response;
+        return commentService.createComment(postId,requestDto,userDetails,bindingResult);
     }
 
     // 댓글 삭제

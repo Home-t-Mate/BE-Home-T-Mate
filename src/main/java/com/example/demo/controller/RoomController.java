@@ -47,7 +47,7 @@ public class RoomController {
     //방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ResponseEntity<Room> createRoom(@RequestBody RoomRequestDto requestDto,
+    public ResponseEntity<RoomResponseDto> createRoom(@RequestBody RoomRequestDto requestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return ResponseEntity.ok().body(roomService.createRoom(requestDto, user));

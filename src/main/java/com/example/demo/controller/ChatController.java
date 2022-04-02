@@ -30,7 +30,8 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("Authorization") String token) throws InterruptedException {
+    public void message(ChatMessage message, @Header("Authorization") String token)
+            throws InterruptedException {
 
         token = token.substring(7);
         message.setSender(jwtDecoder.decodeNickname(token));

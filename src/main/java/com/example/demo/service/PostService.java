@@ -6,6 +6,7 @@ import com.example.demo.dto.PhotoResponseDto;
 import com.example.demo.dto.PostsDeleteRequestDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
+import com.example.demo.dto.postsdto.PostCreateResponseDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
 import com.example.demo.model.*;
 import com.example.demo.repository.CommentRepository;
@@ -14,10 +15,13 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.PhotoRepository;
 import com.example.demo.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +38,10 @@ public class PostService {
 
 
     // 게시글 전체 조회
-    public List<PostResponseDto> getPost() {
+    public List<PostResponseDto> getPost(int page, int size) {
 
-        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
+        Pageable pageable = PageRequest.of(page, size);
+        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
 
         List<PostResponseDto> postResponseDtos = new ArrayList<>();
 
@@ -96,7 +101,7 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public Post createPost(String content, List<MultipartFile> multipartFile, User user) throws IOException {
+    public PostCreateResponseDto createPost(String content, List<MultipartFile> multipartFile, User user) throws IOException {
 
         if (multipartFile == null) {
             throw new IllegalArgumentException("이미지를 넣어주세요.");
@@ -114,7 +119,27 @@ public class PostService {
             Photo photo = new Photo(postImg, post);
             photoRepository.save(photo);
         }
-        return postRepository.save(post);
+
+
+        List<PhotoResponseDto> photoResponseDtos = new ArrayList<>();
+        List<Photo> photos = photoRepository.findByPost(post);
+
+        for (Photo photo : photos) {
+            PhotoResponseDto photoResponseDto = new PhotoResponseDto(photo.getPostImg());
+            photoResponseDtos.add(photoResponseDto);
+        }
+
+        PostCreateResponseDto postCreateResponseDto = new PostCreateResponseDto(
+                post.getId(),
+                user.getId(),
+                user.getProfileImg(),
+                user.getNickname(),
+                content,
+                photoResponseDtos,
+                post.getCreatedAt(),
+                post.getModifiedAt()
+        );
+        return postCreateResponseDto;
     }
 
     @Transactional
