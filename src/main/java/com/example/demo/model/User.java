@@ -1,14 +1,13 @@
 package com.example.demo.model;
 
 import com.example.demo.dto.userdto.UserProfileUpdateDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -49,6 +48,7 @@ public class User {
         this.email = email;
     }
 
+    @Builder
     public User(String username, String nickname, String enPassword, String profileImg){
         this.username = username;
         this.nickname = nickname;

@@ -24,6 +24,4 @@ public class FileController
                                      @RequestPart(name = "video",required = false) MultipartFile videoFile) throws IOException {
        return fileService.fileURL(multipartFileList,videoFile);
     }
-
-
 }

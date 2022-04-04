@@ -8,6 +8,7 @@ import com.example.demo.model.Response;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -30,13 +31,13 @@ public class CommentController {
 
     // 댓글 작성.
     @PostMapping("/api/comments/{postId}")
-    public CommentIdDto createComment(
+    public ResponseEntity<CommentIdDto> createComment(
             @PathVariable Long postId,
             @Validated @RequestBody CommentRequestDto requestDto,
             BindingResult bindingResult,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        return commentService.createComment(postId,requestDto,userDetails,bindingResult);
+        return ResponseEntity.ok().body(commentService.createComment(postId,requestDto,userDetails,bindingResult));
     }
 
     // 댓글 삭제

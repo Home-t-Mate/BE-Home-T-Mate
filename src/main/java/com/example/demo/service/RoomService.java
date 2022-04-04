@@ -40,6 +40,7 @@ public class RoomService {
             throw new IllegalArgumentException("방 이름을 입력해주세요.");
         }
         Room room = Room.create(requestDto, user);
+        //비밀번호가 있다면 true, 없다면 false
         boolean passworkCheck = requestDto.getPassword() != "" ? true : false;
         room.setPassCheck(passworkCheck);
         Room createRoom = roomRepository.save(room);
@@ -102,9 +103,15 @@ public class RoomService {
     }
 
 
+    //방 나가기
+    public void quitRoom(String roomId, User user) {
+        Room room = roomRepository.findByroomId(roomId).orElseThrow(()-> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
+        EnterUser enterUser =  enterUserRepository.findByRoomAndUser(room, user);
+        enterUserRepository.delete(enterUser);
+    }
 
 
-    //전체 방 조회
+    //특정 방 조회
     public RoomResponseDto getRoom(RoomRequestDto requestDto) {
         Room room = roomRepository.findByroomId(requestDto.getRoomId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
@@ -128,36 +135,35 @@ public class RoomService {
         return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
     }
 
-    //전체 방 조화
-    public List<RoomResponseDto> getRooms() {
-        List<Room> rooms = roomRepository.findAll();
-        List<RoomResponseDto> allRooms = new ArrayList<>();
-        for (Room room : rooms) {
-            allRooms.add(new RoomResponseDto(
-                    room.getName(),
-                    room.getRoomId(),
-                    room.getRoomImg(),
-                    room.getContent(),
-                    room.getUserCount(),
-                    room.getPassCheck(),
-                    room.getWorkOut(),
-                    room.getUser().getNickname(),
-                    room.getUser().getProfileImg()
-            ));
-        }
-        return allRooms;
-    }
+//    //전체 방 조화
+//    public List<RoomResponseDto> getRooms() {
+//        List<Room> rooms = roomRepository.findAll();
+//        List<RoomResponseDto> allRooms = new ArrayList<>();
+//        for (Room room : rooms) {
+//            allRooms.add(new RoomResponseDto(
+//                    room.getName(),
+//                    room.getRoomId(),
+//                    room.getRoomImg(),
+//                    room.getContent(),
+//                    room.getUserCount(),
+//                    room.getPassCheck(),
+//                    room.getWorkOut(),
+//                    room.getUser().getNickname(),
+//                    room.getUser().getProfileImg()
+//            ));
+//        }
+//        return allRooms;
+//    }
 
+    // 운동중, 휴식중 상태 변경
     public void workout(RoomRequestDto requestDto) {
         Room room = roomRepository.findByroomId(requestDto.getRoomId()).orElseThrow(() -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
         room.setWorkOut(requestDto.getWorkOut());
     }
 
-    public void quitRoom(String roomId, User user) {
-        Room room = roomRepository.findByroomId(roomId).orElseThrow(()-> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
-        EnterUser enterUser =  enterUserRepository.findByRoomAndUser(room, user);
-        enterUserRepository.delete(enterUser);
-    }
+
+
+
 
     public void deleteRoom(String roomId, User user) {
 
@@ -181,6 +187,7 @@ public class RoomService {
     }
 
 
+    //방 조회 무한스크롤
     public List<RoomResponseDto> roomscroll(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);

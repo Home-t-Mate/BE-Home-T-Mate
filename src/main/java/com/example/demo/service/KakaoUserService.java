@@ -43,17 +43,17 @@ public class KakaoUserService {
 //        String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
 
-
-
         // 2. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(accessToken);
 
         // 3. 로그인 JWT 토큰 발행
         String token = jwtTokenCreate(kakaoUser);
 
+        UserResponseDto userResponseDto = new UserResponseDto(kakaoUser.getId(), kakaoUser.getUsername(), kakaoUser.getNickname(), kakaoUser.getProfileImg());
         return SignupSocialDto.builder()
                 .token(token)
                 .userId(kakaoUser.getId())
+                .userResponseDto(userResponseDto)
                 .build();
     }
 
@@ -130,17 +130,13 @@ public class KakaoUserService {
             String kakaoNick = jsonNode.get("properties").get("nickname").asText();
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
+            //카카오 프로필 미등록 유저는 homeTmate 기본 프로필 이미지로 등록
             if(jsonNode.get("properties").get("profile_image") == null) {
                profileImg = "https://homehang.s3.ap-northeast-2.amazonaws.com/homeTmate/profile.png";
             } else {
                 profileImg = jsonNode.get("properties").get("profile_image").asText();
             }
-
-//            if(email != null) {
-//            kakaoUser = new User(kakaoId, kakaoNick, encodedPassword, profileImg, email);}
-//            else {
                 kakaoUser = new User(kakaoId, kakaoNick, encodedPassword, profileImg);
-//            }
             userRepository.save(kakaoUser);
         }
 

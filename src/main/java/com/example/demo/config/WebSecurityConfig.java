@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -135,7 +136,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 홈
         skipPathList.add("GET,/");
         skipPathList.add("GET,/chat/roomsscroll/**");
-        
+
+        skipPathList.add("GET,/api/posts");
+
 
         skipPathList.add("GET,/story");
         skipPathList.add("GET,/livenow");
@@ -150,7 +153,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 회원 관리 API 허용
         skipPathList.add("GET,/user/kakao/callback");
         skipPathList.add("GET,/user/kakao/callback/{userId}");
-        skipPathList.add("GET,/user/naver/callback");
+        skipPathList.add("POST,/api/user/signup");
+        skipPathList.add("GET,/user/**");
+        skipPathList.add("POST,/user/**");
 
 
 

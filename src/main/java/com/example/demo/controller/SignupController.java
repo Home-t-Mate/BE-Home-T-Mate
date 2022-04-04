@@ -27,7 +27,8 @@ public class SignupController {
 
     // 카카오 회원가입
     @GetMapping("/user/kakao/callback")
-    public SignupSocialDto kakaoLogin(@RequestParam String code, HttpServletResponse response)
+    public SignupSocialDto kakaoLogin(@RequestParam String code,
+                                      HttpServletResponse response)
             throws IOException {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
         SignupSocialDto signupKakaoDto = kakaoUserService.kakaoLogin(code);
@@ -41,7 +42,6 @@ public class SignupController {
     public ResponseEntity<UserResponseDto> kakaoAddUserProfile(@RequestParam String code,
                                                               @PathVariable Long userId
     ) throws IOException {
-
         return ResponseEntity.ok().body(kakaoUserService.kakaoAddUserProfile(code, userId));
     }
 }

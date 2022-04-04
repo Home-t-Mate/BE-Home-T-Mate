@@ -24,12 +24,13 @@ public class RoomController {
     private final RedisRepository repository;
 
 
-    //방 조회
-    @GetMapping("/rooms")
-    @ResponseBody
-    public ResponseEntity<List<RoomResponseDto>> room() {
-        return ResponseEntity.ok().body(roomService.getRooms());
-    }
+//    //방 조회
+//    미사용 API
+//    @GetMapping("/rooms")
+//    @ResponseBody
+//    public ResponseEntity<List<RoomResponseDto>> room() {
+//        return ResponseEntity.ok().body(roomService.getRooms());
+//    }
 
 //  방 조회 페이지 처리(무한스크롤)
     @GetMapping("/roomsscroll")
@@ -40,7 +41,6 @@ public class RoomController {
     ) {
         page = page - 1;
         return ResponseEntity.ok().body(roomService.roomscroll(page, size));
-
     }
 
 
@@ -64,7 +64,7 @@ public class RoomController {
 
 
 
-//    enterUser 삭제
+// enterUser 삭제
    @DeleteMapping("/room/quit/{roomId}")
    @ResponseBody
    public void quitRoom(@PathVariable String roomId,
@@ -82,13 +82,15 @@ public class RoomController {
 
 //    운동중 true, 종료시 false
     @PutMapping("/room/workout")
-    public void workout(@RequestBody RoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void workout(@RequestBody RoomRequestDto requestDto,
+                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         roomService.workout(requestDto);
     }
 
 //    room 삭제
     @DeleteMapping("/room/delete/{roomId}")
-    public void deleteRoom(@RequestParam String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void deleteRoom(@RequestParam String roomId,
+                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         roomService.deleteRoom(roomId, user);
     }
@@ -97,15 +99,9 @@ public class RoomController {
     //룸 이름 조회
     @PostMapping("/room/roomcheck")
     @ResponseBody
-    public ResponseEntity<Boolean> roomCheck(@RequestBody RoomCheckRequestDto roomCheckRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<Boolean> roomCheck(@RequestBody RoomCheckRequestDto roomCheckRequestDto,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return ResponseEntity.ok().body(roomService.roomCheck(roomCheckRequestDto, user));
-    }
-
-    @PostMapping("/user")
-    @ResponseBody
-    public Optional<User> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        return Optional.ofNullable(user);
     }
 }

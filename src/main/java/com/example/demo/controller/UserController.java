@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.userdto.LoginRequestDto;
+import com.example.demo.dto.userdto.SignupRequestDto;
 import com.example.demo.dto.userdto.UserProfileUpdateDto;
 import com.example.demo.dto.userdto.UserResponseDto;
 import com.example.demo.model.User;
@@ -8,11 +10,11 @@ import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +37,14 @@ public class UserController {
         User user = userDetails.getUser();
         UserResponseDto userResponseDto = userService.updateUserProfile(profileImg, user);
         return ResponseEntity.ok().body(userResponseDto);
-
     }
+
+
+//
+//    /* 로그인 */
+//    @PostMapping("/api/user/login")
+//    public LoginResultDto userLogin(@RequestBody LoginRequestDto loginRequestDto,
+//                                    HttpServletResponse response){
+//        return userService.userLogin(loginRequestDto, response);
+//    }
 }

@@ -99,6 +99,63 @@ public class PostService {
     }
 
 
+    //내가 작성한 게시글 조회
+    public List<PostResponseDto> getMyPosts(User user) {
+        List<Post> posts = postRepository.findByUser(user);
+
+        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+
+
+        for (Post post : posts) {
+            List<CommentUserDto> commentUserDtos = new ArrayList<>();
+            List<LikeUserDto> likeUserDtos = new ArrayList<>();
+            List<PhotoResponseDto> photoResponseDtos = new ArrayList<>();
+
+
+            Long commentCount = commentRepository.countByPost(post);
+            Long likeCount = likeRepository.countByPost(post);
+
+            List<Like> likes = likeRepository.findAllByPost(post);
+            List<Comment> comments = commentRepository.findAllByPost(post);
+
+            List<Photo> photos = photoRepository.findByPost(post);
+
+
+            for (Like like : likes) {
+                LikeUserDto likeUserDto = new LikeUserDto(like);
+                likeUserDtos.add(likeUserDto);
+            }
+
+            for (Comment comment : comments) {
+                CommentUserDto commentUserDto = new CommentUserDto(comment);
+                commentUserDtos.add(commentUserDto);
+            }
+
+            for (Photo photo : photos) {
+                PhotoResponseDto photoResponseDto = new PhotoResponseDto(photo.getPostImg());
+                photoResponseDtos.add(photoResponseDto);
+            }
+
+            PostResponseDto postResponseDto = new PostResponseDto(
+                    post.getId(),
+                    post.getUser().getId(),
+                    post.getUser().getNickname(),
+                    post.getContent(),
+                    post.getPostImg(),
+                    commentCount,
+                    likeCount,
+                    commentUserDtos,
+                    likeUserDtos,
+                    photoResponseDtos,
+                    post.getUser().getProfileImg(),
+                    post.getCreatedAt(),
+                    post.getModifiedAt()
+            );
+            postResponseDtos.add(postResponseDto);
+        }
+        return postResponseDtos;
+    }
+
     // 게시글 작성
     @Transactional
     public PostCreateResponseDto createPost(String content, List<MultipartFile> multipartFile, User user) throws IOException {
@@ -142,6 +199,7 @@ public class PostService {
         return postCreateResponseDto;
     }
 
+    //게시글 수정
     @Transactional
     public void updatePost(List<MultipartFile> multipartFile, String content, Long postId, User user) throws IOException {
 
@@ -153,8 +211,6 @@ public class PostService {
         if (post == null) {
             throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다.");
         }
-
-
         photoRepository.deleteByPost(post);
 
         post.update(content, user);
