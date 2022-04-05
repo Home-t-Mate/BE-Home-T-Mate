@@ -1,20 +1,17 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
+import com.example.demo.dto.room.*;
 import com.example.demo.model.User;
-import com.example.demo.model.Room;
 import com.example.demo.repository.RedisRepository;
 import com.example.demo.security.UserDetailsImpl;
 import com.example.demo.service.RoomService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor

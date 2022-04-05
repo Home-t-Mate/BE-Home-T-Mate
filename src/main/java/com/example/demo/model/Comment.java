@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.dto.commentdto.CommentRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

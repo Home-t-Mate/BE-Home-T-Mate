@@ -19,10 +19,8 @@ public class Photo {
     @Column
     private String postImg;
 
-
-
     @JoinColumn
-    @ManyToOne()
+    @ManyToOne
     private Post post;
 
     public Photo(String postImg, Post post) {

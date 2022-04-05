@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 
 import com.example.demo.config.S3Uploader;
-import com.example.demo.dto.PhotoResponseDto;
-import com.example.demo.dto.PostsDeleteRequestDto;
+import com.example.demo.dto.postsdto.PhotoResponseDto;
+import com.example.demo.dto.postsdto.PostsDeleteRequestDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import com.example.demo.dto.postsdto.PostCreateResponseDto;
@@ -19,9 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,32 +47,24 @@ public class PostService {
 
 
         for (Post post : posts) {
-
             List<CommentUserDto> commentUserDtos = new ArrayList<>();
             List<LikeUserDto> likeUserDtos = new ArrayList<>();
             List<PhotoResponseDto> photoResponseDtos = new ArrayList<>();
 
 
-            Long commentCount = commentRepository.countByPost(post);
-            Long likeCount = likeRepository.countByPost(post);
-
-            List<Like> likes = likeRepository.findAllByPost(post);
-            List<Comment> comments = commentRepository.findAllByPost(post);
-
-            List<Photo> photos = photoRepository.findByPost(post);
-
-
-            for (Like like : likes) {
+            for (Like like : post.getLikes()) {
                 LikeUserDto likeUserDto = new LikeUserDto(like);
                 likeUserDtos.add(likeUserDto);
             }
 
-            for (Comment comment : comments) {
+
+            for (Comment comment : post.getComments()) {
                 CommentUserDto commentUserDto = new CommentUserDto(comment);
                 commentUserDtos.add(commentUserDto);
             }
 
-            for (Photo photo : photos) {
+
+            for (Photo photo : post.getPhotos()) {
                 PhotoResponseDto photoResponseDto = new PhotoResponseDto(photo.getPostImg());
                 photoResponseDtos.add(photoResponseDto);
             }
@@ -83,9 +75,6 @@ public class PostService {
                     post.getUser().getId(),
                     post.getUser().getNickname(),
                     post.getContent(),
-                    post.getPostImg(),
-                    commentCount,
-                    likeCount,
                     commentUserDtos,
                     likeUserDtos,
                     photoResponseDtos,
@@ -111,27 +100,18 @@ public class PostService {
             List<LikeUserDto> likeUserDtos = new ArrayList<>();
             List<PhotoResponseDto> photoResponseDtos = new ArrayList<>();
 
-
-            Long commentCount = commentRepository.countByPost(post);
-            Long likeCount = likeRepository.countByPost(post);
-
-            List<Like> likes = likeRepository.findAllByPost(post);
-            List<Comment> comments = commentRepository.findAllByPost(post);
-
-            List<Photo> photos = photoRepository.findByPost(post);
-
-
-            for (Like like : likes) {
+            for (Like like : post.getLikes()) {
                 LikeUserDto likeUserDto = new LikeUserDto(like);
                 likeUserDtos.add(likeUserDto);
             }
 
-            for (Comment comment : comments) {
+            for (Comment comment : post.getComments()) {
                 CommentUserDto commentUserDto = new CommentUserDto(comment);
                 commentUserDtos.add(commentUserDto);
             }
 
-            for (Photo photo : photos) {
+
+            for (Photo photo : post.getPhotos()) {
                 PhotoResponseDto photoResponseDto = new PhotoResponseDto(photo.getPostImg());
                 photoResponseDtos.add(photoResponseDto);
             }
@@ -141,9 +121,6 @@ public class PostService {
                     post.getUser().getId(),
                     post.getUser().getNickname(),
                     post.getContent(),
-                    post.getPostImg(),
-                    commentCount,
-                    likeCount,
                     commentUserDtos,
                     likeUserDtos,
                     photoResponseDtos,
@@ -233,13 +210,14 @@ public class PostService {
         if (!Objects.equals(userDetails.getUser().getId(), deleteId)) {
             throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
         }
-        List<Comment> comments = commentRepository.findAllByPost(post);
-        for (Comment comment : comments) {
-            commentRepository.deleteById(comment.getId());
-        }
-        likeRepository.deleteByPost(post);
+//        List<Comment> comments = commentRepository.findAllByPost(post);
+//        for (Comment comment : comments) {
+//            commentRepository.deleteById(comment.getId());
+//        }
+
+//        likeRepository.deleteByPost(post);
         postRepository.delete(post);
-        photoRepository.deleteByPost(post);
+//        photoRepository.deleteByPost(post);
         return postId;
     }
 
@@ -256,21 +234,6 @@ public class PostService {
             Long deleteId = user.getId();
             if (!Objects.equals(userDetails.getUser().getId(), deleteId)) {
                 throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
-            }
-
-            List<Comment> comments = commentRepository.findAllByPost(post);
-            for (Comment comment : comments) {
-                commentRepository.deleteById(comment.getId());
-            }
-
-            List<Like> likes = likeRepository.findAllByPost(post);
-            for (Like like : likes) {
-                likeRepository.deleteById(like.getId());
-            }
-
-            List<Photo> photos = photoRepository.findAllByPost(post);
-            for (Photo photo : photos) {
-                photoRepository.deleteById(photo.getId());
             }
 
             postRepository.delete(post);

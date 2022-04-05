@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 
-import com.example.demo.dto.RoomRequestDto;
+import com.example.demo.dto.room.RoomRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,8 +49,6 @@ public class Room extends Timestamped implements Serializable {
 
     @Column
     private int count;
-
-
 
 
     public Room() {

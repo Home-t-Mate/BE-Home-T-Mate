@@ -1,6 +1,5 @@
 package com.example.demo.dto.postsdto;
 
-import com.example.demo.dto.PhotoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

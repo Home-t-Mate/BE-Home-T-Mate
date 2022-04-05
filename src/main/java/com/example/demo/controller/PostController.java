@@ -1,12 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.S3Uploader;
-import com.example.demo.dto.ContentRequestDto;
-import com.example.demo.dto.PostsDeleteRequestDto;
+import com.example.demo.dto.postsdto.PostsDeleteRequestDto;
 import com.example.demo.dto.postsdto.PostCreateResponseDto;
-import com.example.demo.dto.postsdto.PostRequestDto;
 import com.example.demo.dto.postsdto.PostResponseDto;
-import com.example.demo.model.Post;
 import com.example.demo.model.Response;
 import com.example.demo.model.User;
 import com.example.demo.security.UserDetailsImpl;

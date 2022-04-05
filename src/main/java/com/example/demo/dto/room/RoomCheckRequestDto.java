@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.room;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +7,4 @@ import lombok.Setter;
 @Setter
 public class RoomCheckRequestDto {
     private String name;
-
-
 }

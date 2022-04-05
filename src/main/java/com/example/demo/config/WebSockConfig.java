@@ -38,7 +38,6 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
             registration.interceptors(stompHandler);
         }
 
-
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
         registration.setMessageSizeLimit(160 * 64 * 1024); // default : 64 * 1024

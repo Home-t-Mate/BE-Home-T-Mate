@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.dto.RoomResponseDto;
+import com.example.demo.dto.room.RoomResponseDto;
 import com.example.demo.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

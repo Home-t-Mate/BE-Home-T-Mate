@@ -19,6 +19,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Min;
 import java.util.Optional;
 
 @Slf4j
@@ -32,6 +33,7 @@ public class StompHandler implements ChannelInterceptor {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final EnterUserRepository enterUserRepository;
+    private final Long min = 0L;
 
 
 
@@ -61,6 +63,9 @@ public class StompHandler implements ChannelInterceptor {
             if (roomId != null) {
                 Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다."));
                 room.setUserCount(redisRepository.getUserCount(roomId));
+                if (redisRepository.getUserCount(roomId) < 0) {
+                    room.setUserCount(min);
+                }
                 roomRepository.save(room);
             }
 

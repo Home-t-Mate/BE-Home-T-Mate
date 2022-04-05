@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.*;
+import com.example.demo.dto.room.*;
 import com.example.demo.model.EnterUser;
 import com.example.demo.model.User;
 import com.example.demo.model.Room;
@@ -135,33 +135,11 @@ public class RoomService {
         return new RoomResponseDto(name, roomId, roomImg, content, userCount, passCheck, workOut, nickname, profileImg);
     }
 
-//    //전체 방 조화
-//    public List<RoomResponseDto> getRooms() {
-//        List<Room> rooms = roomRepository.findAll();
-//        List<RoomResponseDto> allRooms = new ArrayList<>();
-//        for (Room room : rooms) {
-//            allRooms.add(new RoomResponseDto(
-//                    room.getName(),
-//                    room.getRoomId(),
-//                    room.getRoomImg(),
-//                    room.getContent(),
-//                    room.getUserCount(),
-//                    room.getPassCheck(),
-//                    room.getWorkOut(),
-//                    room.getUser().getNickname(),
-//                    room.getUser().getProfileImg()
-//            ));
-//        }
-//        return allRooms;
-//    }
-
     // 운동중, 휴식중 상태 변경
     public void workout(RoomRequestDto requestDto) {
         Room room = roomRepository.findByroomId(requestDto.getRoomId()).orElseThrow(() -> new IllegalArgumentException("해당 방이 존재하지 않습니다."));
         room.setWorkOut(requestDto.getWorkOut());
     }
-
-
 
 
 

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.RoomResponseDto;
+import com.example.demo.dto.room.RoomResponseDto;
 import com.example.demo.model.Room;
 import com.example.demo.model.User;
 import com.example.demo.repository.RoomRepository;

@@ -1,6 +1,5 @@
-package com.example.demo.dto;
+package com.example.demo.dto.postsdto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

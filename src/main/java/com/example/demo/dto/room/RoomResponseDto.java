@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.room;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class RoomResponseDto {
         this.roomId = roomId;
         this.roomImg = roomImg;
         this.content = content;
-        this.userCount = userCount;
+        this.userCount = userCount < 0 ? 0 : userCount;
         this.passCheck = passCheck;
         this.workOut = workOut;
         this.nickname = nickname;

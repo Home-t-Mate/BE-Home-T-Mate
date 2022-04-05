@@ -1,6 +1,5 @@
 package com.example.demo.dto.postsdto;
 
-import com.example.demo.dto.PhotoResponseDto;
 import com.example.demo.dto.commentdto.CommentUserDto;
 import com.example.demo.dto.likedto.LikeUserDto;
 import lombok.Getter;
@@ -18,9 +17,6 @@ public class PostResponseDto {
     private String nickname;
     private String userImg;
     private String content;
-    private String postsImg;
-    private Long commentCount;
-    private Long likeCount;
     private List<CommentUserDto> commentUserDto;
     private List<LikeUserDto> likeUserDto;
     private List<PhotoResponseDto> photoResponseDto;
@@ -30,8 +26,7 @@ public class PostResponseDto {
 //
 //
 //
-    public PostResponseDto(Long id, Long userId, String nickname, String content, String postsImg ,
-                           Long commentCount, Long likeCount,
+    public PostResponseDto(Long id, Long userId, String nickname, String content ,
                            List<CommentUserDto> commentUserDto, List<LikeUserDto> likeUserDto, List<PhotoResponseDto> photoResponseDto,
                            String userImg, LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
@@ -39,9 +34,6 @@ public class PostResponseDto {
         this.userId = userId;
         this.nickname = nickname;
         this.content = content;
-        this.postsImg = postsImg;
-        this.commentCount = commentCount;
-        this.likeCount = likeCount;
         this.commentUserDto = commentUserDto;
         this.likeUserDto = likeUserDto;
         this.photoResponseDto = photoResponseDto;

@@ -38,13 +38,4 @@ public class UserController {
         UserResponseDto userResponseDto = userService.updateUserProfile(profileImg, user);
         return ResponseEntity.ok().body(userResponseDto);
     }
-
-
-//
-//    /* 로그인 */
-//    @PostMapping("/api/user/login")
-//    public LoginResultDto userLogin(@RequestBody LoginRequestDto loginRequestDto,
-//                                    HttpServletResponse response){
-//        return userService.userLogin(loginRequestDto, response);
-//    }
 }

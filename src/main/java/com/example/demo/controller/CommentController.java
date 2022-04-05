@@ -29,6 +29,7 @@ public class CommentController {
         return commentService.getComment(postId);
     }
 
+
     // 댓글 작성.
     @PostMapping("/api/comments/{postId}")
     public ResponseEntity<CommentIdDto> createComment(
