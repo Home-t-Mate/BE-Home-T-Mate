@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-
+    @Query(  "select m from Post m left join fetch m.comments")
     List<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     void deleteById(Long postId);
