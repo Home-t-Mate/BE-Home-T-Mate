@@ -36,7 +36,6 @@ public class StompHandler implements ChannelInterceptor {
     private final Long min = 0L;
 
 
-
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
@@ -86,10 +85,11 @@ public class StompHandler implements ChannelInterceptor {
                 Room room = roomRepository.findByroomId(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방입니다.(DISCONNECT)"));
 
 
-                if (roomId != null) {
-                    room.setUserCount(redisRepository.getUserCount(roomId));
-                    roomRepository.save(room);
-                }
+                room.setUserCount(redisRepository.getUserCount(roomId));
+                System.out.println(redisRepository.getUserCount(roomId));
+                log.info("USERCOUNT {}, {}", roomId, redisRepository.getUserCount(roomId));
+
+                roomRepository.save(room);
 
                 //유튜브 켜고 방 나왔을 때, 방 인원이 0명이면 false로
                 if (redisRepository.getUserCount(roomId) == 0) {
@@ -106,6 +106,13 @@ public class StompHandler implements ChannelInterceptor {
 
                 redisRepository.removeUserEnterInfo(sessionId);
                 log.info("DISCONNECTED {}, {}", sessionId, roomId);
+
+                if (room.getUserCount() < 0) {
+                    room.setUserCount(0L);
+                    roomRepository.save(room);
+                    log.info("0이하 보정 {}", roomId);
+
+                }
             }
         }
         return message;

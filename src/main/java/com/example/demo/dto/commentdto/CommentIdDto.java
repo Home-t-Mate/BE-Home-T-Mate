@@ -9,4 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentIdDto {
     private Long Id;
+    private Long userId;
 }

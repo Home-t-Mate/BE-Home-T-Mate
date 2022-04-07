@@ -44,7 +44,8 @@ public class CommentService {
         } else {
             Comment comment = new Comment(requestDto,post,user);
             Long Id = commentRepository.save(comment).getId();
-            return new CommentIdDto(Id);
+            Long userId = comment.getUser().getId();
+            return new CommentIdDto(Id, userId);
         }
     }
 
